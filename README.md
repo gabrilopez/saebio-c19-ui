@@ -1,4 +1,4 @@
-# saebio-ui-2
+# saebio-ui
 
 ## Project setup
 ```
