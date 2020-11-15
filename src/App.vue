@@ -1,15 +1,16 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <covid-container />
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue';
+import CovidContainer from '@/modules/covid/CovidContainer';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld,
+    CovidContainer,
   },
 };
 </script>

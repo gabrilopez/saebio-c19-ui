@@ -1,0 +1,36 @@
+.covid-navbar {
+    width: 100%;
+    height: 60px;
+    background-color: #F9FBFC !important;
+    position: fixed;
+    top: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: .5rem 1rem;
+    border-bottom: 1px solid #EFEFEF;
+}
+
+.covid-navbar img {
+    margin: 0 10px;
+    cursor: pointer;
+}
+
+.covid-container {
+    background-color: white;
+    width: 100%;
+    height: 100%;
+}
+
+.metabase-container {
+    width: 100vw;
+    height: 100vh;
+}
+
+.footer-logo {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin-right: 20px;
+}
