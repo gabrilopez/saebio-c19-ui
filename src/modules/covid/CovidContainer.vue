@@ -2,25 +2,31 @@
   <div class="covid-container">
     <div class="covid-navbar">
       <div class="row" style="justify-self: flex-start; align-items: center;">
-        <img src="../../assets/icons/menu.png" width="24" height="24">
-        <p class="h6" style="font-size: 10px; padding: 0; margin: 0 10px;">ESTADÍSTICAS COVID</p>
+        <img src="../../assets/icons/menu.png" width="24" height="24" alt="Menu">
+        <p class="h6" style="font-size: 10px; padding: 0; margin: 0 10px;">
+          ESTADÍSTICAS COVID
+        </p>
       </div>
       <div>
-        <img src="../../assets/icons/upload.png" @click="showUploadFileContainer" width="28" height="28">
+        <img src="../../assets/icons/upload.png" width="28" height="28" @click="showUploadFileContainer">
         <img src="../../assets/icons/refresh.png" width="24" height="24">
       </div>
     </div>
-    <div v-if="uploadFileContainer">
+    <div v-if="uploadFileContainer" style="margin-top:80px;">
       <form enctype="multipart/form-data" @submit.prevent="uploadFile">
-        <input id="file" type="file" accept=".csv" @change="checkValid">
-        <button
-          :disabled="!fileIsValid"
-          style="width: 50px; height: 20px;"
-          type="submit"
-        >
-          Enviar
-        </button>
+        <div class="upload-file-container">
+          <input id="file" type="file" accept=".csv" @change="checkValid">
+          <button
+            :disabled="!fileIsValid"
+            class="btn btn-dark m-3"
+            style="cursor: pointer;"
+            type="submit"
+          >
+            Enviar
+          </button>
+        </div>
       </form>
+      <div v-if="isLoadingFileUpload" class="spinner-border" />
     </div>
     <div v-if="iframeUrl" class="metabase-container">
       <iframe
@@ -54,6 +60,7 @@ export default {
       fileIsValid: false,
       iframeUrl: null,
       uploadFileContainer: false,
+      isLoadingFileUpload: false,
     };
   },
   mounted() {
@@ -70,10 +77,10 @@ export default {
     };
     const token = jwt.sign(payload, METABASE_SECRET_KEY);
     this.iframeUrl = `${METABASE_SITE_URL}/embed/dashboard/${token}#bordered=false&titled=false`;
-    console.log(this.iframeUrl);
   },
   methods: {
     uploadFile() {
+      this.isLoadingFileUpload = true;
       const formData = new FormData();
       const csvFile = document.querySelector('#file');
       formData.append('file', csvFile.files[0]);
@@ -82,7 +89,15 @@ export default {
           'Content-Type': 'multipart/form-data',
         },
       };
-      globalAxios.post('http://localhost:4567/insert-data', formData, config);
+      globalAxios.post('http://localhost:4567/insert-data', formData, config)
+        .then((data) => {
+          console.log(data);
+          this.isLoadingFileUpload = false;
+        })
+        .catch((error) => {
+          console.log(error);
+          this.isLoadingFileUpload = false;
+        });
     },
     checkValid() {
       const csvFile = document.querySelector('#file');
@@ -90,6 +105,11 @@ export default {
     },
     showUploadFileContainer() {
       this.uploadFileContainer = true;
+      this.$nextTick(() => {
+        const uploadFileContainer = document.getElementsByClassName('upload-file-container')[0];
+        uploadFileContainer.style.maxHeight = '300px';
+        uploadFileContainer.style.border = '1px solid #efefef';
+      });
     },
   },
 };
