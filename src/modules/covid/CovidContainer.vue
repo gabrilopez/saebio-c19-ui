@@ -1,6 +1,6 @@
 <template>
   <div class="covid-container">
-    <div class="covid-navbar">
+    <div v-if="!printMode" class="covid-navbar">
       <div class="row" style="justify-self: flex-start; align-items: center;">
         <img src="../../assets/icons/menu.png" width="24" height="24" alt="Menu">
         <p class="h6" style="font-size: 10px; padding: 0; margin: 0 10px;">
@@ -12,39 +12,58 @@
         <img src="../../assets/icons/refresh.png" width="24" height="24">
       </div>
     </div>
-    <div v-if="uploadFileContainer" style="margin-top:80px;">
-      <form enctype="multipart/form-data" @submit.prevent="uploadFile">
+    <div v-if="uploadFileContainer && !printMode" style="margin-top:80px;">
+      <form v-if="!uploadErrorMessage" enctype="multipart/form-data" @submit.prevent="uploadFile">
         <div class="upload-file-container">
           <input id="file" type="file" accept=".csv" @change="checkValid">
           <button
             :disabled="!fileIsValid"
             class="btn btn-dark m-3"
-            style="cursor: pointer;"
             type="submit"
           >
             Enviar
           </button>
         </div>
       </form>
+      <div v-if="uploadErrorMessage" class="col-12">
+        <p>Ha ocurrido un error al conectar con el servidor. Por favor, inténtelo de nuevo más tarde</p>
+        <button
+          class="bn btn-dark m-3"
+          @click="clearFileUpload"
+        >
+          Intentar de nuevo
+        </button>
+      </div>
       <div v-if="isLoadingFileUpload" class="spinner-border" />
     </div>
-    <div v-if="iframeUrl" class="metabase-container">
+    <div v-if="iframeUrl" id="metabase-container" class="metabase-container">
       <iframe
+        id="metabase-content"
         :src="iframeUrl"
         frameborder="0"
-        style="width: 100%; height: 100%;"
+        scrolling="no"
+        style="height: 100%; width: 100%;"
         height="100%"
         width="100%"
         allowtransparency
       />
     </div>
-    <img
-      alt="saebio project"
-      class="footer-logo"
-      src="../../assets/icons/logo.png"
-      width="64"
-      height="32"
-    >
+    <div v-if="!printMode" class="footer-logo">
+      <img
+        alt="saebio project"
+        src="../../assets/icons/logo.png"
+        width="64"
+        height="32"
+      >
+      <img
+        alt="Descargar informe completo"
+        src="../../assets/icons/download.png"
+        style="cursor: pointer;"
+        width="60"
+        height="49"
+        @click="saveToPDF"
+      >
+    </div>
   </div>
 </template>
 
@@ -59,8 +78,10 @@ export default {
     return {
       fileIsValid: false,
       iframeUrl: null,
-      uploadFileContainer: false,
       isLoadingFileUpload: false,
+      printMode: false,
+      uploadFileContainer: false,
+      uploadErrorMessage: false,
     };
   },
   mounted() {
@@ -79,6 +100,39 @@ export default {
     this.iframeUrl = `${METABASE_SITE_URL}/embed/dashboard/${token}#bordered=false&titled=false`;
   },
   methods: {
+    checkValid() {
+      const csvFile = document.querySelector('#file');
+      this.fileIsValid = csvFile && csvFile.files[0];
+    },
+    clearFileUpload() {
+      const csvFile = document.querySelector('#file');
+      if (csvFile && csvFile.files) csvFile.files.slice(0);
+      this.uploadErrorMessage = false;
+      this.showUploadFileContainer();
+    },
+    saveToPDF() {
+      let originalHeight = '';
+      const metabaseContainer = document.getElementById('metabase-container');
+      this.printMode = true;
+      if (metabaseContainer) {
+        originalHeight = metabaseContainer.clientHeight;
+        console.log(originalHeight);
+        metabaseContainer.style.height = '7000px';
+      }
+      this.$nextTick(() => {
+        window.print();
+        this.printMode = false;
+        if (metabaseContainer) metabaseContainer.style.height = originalHeight;
+      });
+    },
+    showUploadFileContainer() {
+      this.uploadFileContainer = true;
+      this.$nextTick(() => {
+        const uploadFileContainer = document.getElementsByClassName('upload-file-container')[0];
+        uploadFileContainer.style.maxHeight = '300px';
+        uploadFileContainer.style.border = '1px solid #efefef';
+      });
+    },
     uploadFile() {
       this.isLoadingFileUpload = true;
       const formData = new FormData();
@@ -97,19 +151,8 @@ export default {
         .catch((error) => {
           console.log(error);
           this.isLoadingFileUpload = false;
+          this.uploadErrorMessage = true;
         });
-    },
-    checkValid() {
-      const csvFile = document.querySelector('#file');
-      this.fileIsValid = csvFile && csvFile.files[0];
-    },
-    showUploadFileContainer() {
-      this.uploadFileContainer = true;
-      this.$nextTick(() => {
-        const uploadFileContainer = document.getElementsByClassName('upload-file-container')[0];
-        uploadFileContainer.style.maxHeight = '300px';
-        uploadFileContainer.style.border = '1px solid #efefef';
-      });
     },
   },
 };

@@ -32,7 +32,8 @@
 
 .metabase-container {
     width: 100vw;
-    height: 100vh;
+    height: 9000px;
+    padding: 0 13px 0 0;
 }
 
 .upload-file-container {
@@ -50,4 +51,9 @@
     -webkit-transition: all 0.3s;
     -moz-transition: all 0.3s;
     -o-transition: all 0.3s;
+}
+
+button {
+    border-radius: 4px;
+    cursor: pointer;
 }
