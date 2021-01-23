@@ -116,7 +116,6 @@ export default {
       this.printMode = true;
       if (metabaseContainer) {
         originalHeight = metabaseContainer.clientHeight;
-        console.log(originalHeight);
         metabaseContainer.style.height = '7000px';
       }
       this.$nextTick(() => {
