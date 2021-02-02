@@ -9,12 +9,17 @@
       </div>
       <div>
         <img src="../../assets/icons/upload.png" width="28" height="28" @click="showUploadFileContainer">
-        <img src="../../assets/icons/refresh.png" width="24" height="24">
+        <img
+          src="../../assets/icons/refresh.png"
+          width="24"
+          height="24"
+          @click="refreshMetabase"
+        >
       </div>
     </div>
-    <div v-if="uploadFileContainer && !printMode" style="margin-top:80px;">
-      <form v-if="!uploadErrorMessage" enctype="multipart/form-data" @submit.prevent="uploadFile">
-        <div class="upload-file-container">
+    <div v-if="uploadFileContainer && !printMode">
+      <form v-if="!uploadErrorMessage && !uploadSuccessMessage" enctype="multipart/form-data" @submit.prevent="uploadFile">
+        <div id="upload-file-container" class="upload-file-container">
           <input id="file" type="file" accept=".csv" @change="checkValid">
           <button
             :disabled="!fileIsValid"
@@ -29,9 +34,18 @@
         <p>Ha ocurrido un error al conectar con el servidor. Por favor, inténtelo de nuevo más tarde</p>
         <button
           class="bn btn-dark m-3"
-          @click="clearFileUpload"
+          @click="clearFileUpload(false)"
         >
           Intentar de nuevo
+        </button>
+      </div>
+      <div v-if="uploadSuccessMessage" class="col-12">
+        <p>¡Datos añadidos exitosamente!</p>
+        <button
+          class="bn btn-dark m-3"
+          @click="clearFileUpload(true)"
+        >
+          Cerrar
         </button>
       </div>
       <div v-if="isLoadingFileUpload" class="spinner-border" />
@@ -72,6 +86,9 @@ import globalAxios from 'axios';
 
 const jwt = require('jsonwebtoken');
 
+const METABASE_SITE_URL = 'http://localhost:3000';
+const METABASE_SECRET_KEY = '8bae34dd8f74efb53e6cbe0b5369ef2f4c327e916e5cc895994ea04c7c7f8984';
+
 export default {
   name: 'CovidContainer',
   data() {
@@ -82,33 +99,49 @@ export default {
       printMode: false,
       uploadFileContainer: false,
       uploadErrorMessage: false,
+      uploadSuccessMessage: false,
     };
   },
   mounted() {
-    const METABASE_SITE_URL = 'http://localhost:3000';
-    const METABASE_SECRET_KEY = '8bae34dd8f74efb53e6cbe0b5369ef2f4c327e916e5cc895994ea04c7c7f8984';
-
-    const payload = {
-      resource: {
-        dashboard: 5,
-      },
-      params: {
-      },
-      exp: Math.round(Date.now() / 1000) + (10 * 60), // 10 minute expiration
-    };
-    const token = jwt.sign(payload, METABASE_SECRET_KEY);
-    this.iframeUrl = `${METABASE_SITE_URL}/embed/dashboard/${token}#bordered=false&titled=false`;
+    this.generateMetabaseTokenUrl();
   },
   methods: {
     checkValid() {
       const csvFile = document.querySelector('#file');
       this.fileIsValid = csvFile && csvFile.files[0];
     },
-    clearFileUpload() {
+    clearFileUpload(close) {
       const csvFile = document.querySelector('#file');
-      if (csvFile && csvFile.files) csvFile.files.slice(0);
+      if (csvFile && csvFile.files) csvFile.value = '';
       this.uploadErrorMessage = false;
-      this.showUploadFileContainer();
+      this.uploadSuccessMessage = false;
+
+      if (close) {
+        this.uploadFileContainer = false;
+      } else {
+        this.showUploadFileContainer();
+      }
+    },
+    generateMetabaseTokenUrl() {
+      const payload = {
+        resource: {
+          dashboard: 5,
+        },
+        params: {
+        },
+        exp: Math.round(Date.now() / 1000) + (10 * 60), // 10 minute expiration
+      };
+      const token = jwt.sign(payload, METABASE_SECRET_KEY);
+      this.iframeUrl = `${METABASE_SITE_URL}/embed/dashboard/${token}#bordered=false&titled=false&refresh=60`;
+    },
+    refreshMetabase() {
+      const iFrame = document.getElementById('metabase-content');
+      if (iFrame) {
+        this.generateMetabaseTokenUrl();
+        this.$nextTick(() => {
+          iFrame.src = this.iframeUrl;
+        });
+      }
     },
     saveToPDF() {
       let originalHeight = '';
@@ -116,18 +149,18 @@ export default {
       this.printMode = true;
       if (metabaseContainer) {
         originalHeight = metabaseContainer.clientHeight;
-        metabaseContainer.style.height = '7000px';
+        metabaseContainer.style.height = '7500px';
       }
       this.$nextTick(() => {
         window.print();
         this.printMode = false;
-        if (metabaseContainer) metabaseContainer.style.height = originalHeight;
+        if (metabaseContainer) metabaseContainer.style.height = `${originalHeight}px`;
       });
     },
     showUploadFileContainer() {
       this.uploadFileContainer = true;
       this.$nextTick(() => {
-        const uploadFileContainer = document.getElementsByClassName('upload-file-container')[0];
+        const uploadFileContainer = document.getElementById('upload-file-container');
         uploadFileContainer.style.maxHeight = '300px';
         uploadFileContainer.style.border = '1px solid #efefef';
       });
@@ -146,6 +179,7 @@ export default {
         .then((data) => {
           console.log(data);
           this.isLoadingFileUpload = false;
+          this.uploadSuccessMessage = true;
         })
         .catch((error) => {
           console.log(error);

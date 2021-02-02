@@ -32,7 +32,7 @@
 
 .metabase-container {
     width: 100vw;
-    height: 9000px;
+    height: 9600px;
     padding: 0 13px 0 0;
 }
 
@@ -56,4 +56,9 @@
 button {
     border-radius: 4px;
     cursor: pointer;
+}
+
+* {
+    -webkit-print-color-adjust: exact !important;   /* Chrome, Safari */
+    color-adjust: exact !important;                 /*Firefox*/
 }
