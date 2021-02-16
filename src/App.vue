@@ -1,16 +1,20 @@
 <template>
   <div style="overflow-x: hidden;">
-    <covid-container />
+    <!--<covid-container />-->
+    <router-view />
+    <!--<backup-container />-->
   </div>
 </template>
 
 <script>
-import CovidContainer from '@/modules/covid/CovidContainer';
+// import CovidContainer from '@/modules/covid/CovidContainer';
+// import BackupContainer from '@/modules/backups/BackupContainer';
 
 export default {
   name: 'App',
   components: {
-    CovidContainer,
+    // BackupContainer,
+    // CovidContainer,
   },
 };
 </script>

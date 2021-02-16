@@ -2,17 +2,41 @@
   <div class="covid-container">
     <div v-if="!printMode" class="covid-navbar">
       <div class="row" style="justify-self: flex-start; align-items: center;">
-        <img src="../../assets/icons/menu.png" width="24" height="24" alt="Menu">
-        <p class="h6" style="font-size: 10px; padding: 0; margin: 0 10px;">
-          ESTADÍSTICAS COVID
+        <div class="dropdown-menu">
+          <a
+            class="dropdown-item"
+            style="cursor: pointer;"
+            @click="dashboardToggle"
+          >
+            {{ covidDashboard ? $i18n.t('metabase.navbar.samples') : $i18n.t('metabase.navbar.covid') }}
+          </a>
+        </div>
+        <button
+          id="dropdown-toggle"
+          style="all: unset;"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          <img src="../../assets/icons/menu.png" width="24" height="24" alt="Menu">
+        </button>
+        <p class="h6" style="font-size: 10px; padding: 0; margin: 0 10px; text-transform: uppercase;">
+          {{ $i18n.t('metabase.navbar.label') }}
         </p>
       </div>
       <div>
-        <img src="../../assets/icons/upload.png" width="28" height="28" @click="showUploadFileContainer">
+        <img
+          src="../../assets/icons/upload.png"
+          width="28"
+          height="28"
+          :alt="$i18n.t('metabase.alt.upload')"
+          @click="showUploadFileContainer"
+        >
         <img
           src="../../assets/icons/refresh.png"
           width="24"
           height="24"
+          :alt="$i18n.t('metabase.alt.refresh')"
           @click="refreshMetabase"
         >
       </div>
@@ -26,26 +50,27 @@
             class="btn btn-dark m-3"
             type="submit"
           >
-            Enviar
+            {{ $i18n.t('metabase.buttons.send') }}
+            {{ $i18n.t('metabase.buttons.send') }}
           </button>
         </div>
       </form>
       <div v-if="uploadErrorMessage" class="col-12">
-        <p>Ha ocurrido un error al conectar con el servidor. Por favor, inténtelo de nuevo más tarde</p>
+        <p>{{ $i18n.t('metabase.messages.uploadFileError') }}</p>
         <button
           class="bn btn-dark m-3"
           @click="clearFileUpload(false)"
         >
-          Intentar de nuevo
+          {{ $i18n.t('metabase.buttons.tryAgain') }}
         </button>
       </div>
       <div v-if="uploadSuccessMessage" class="col-12">
-        <p>¡Datos añadidos exitosamente!</p>
+        <p>TODO: AÑADIR MENSAJE DEL SERVIDOR</p>
         <button
           class="bn btn-dark m-3"
           @click="clearFileUpload(true)"
         >
-          Cerrar
+          {{ $i18n.t('metabase.buttons.close') }}
         </button>
       </div>
       <div v-if="isLoadingFileUpload" class="spinner-border" />
@@ -64,13 +89,13 @@
     </div>
     <div v-if="!printMode" class="footer-logo">
       <img
-        alt="saebio project"
+        :alt="$i18n.t('saebio')"
         src="../../assets/icons/logo.png"
         width="64"
         height="32"
       >
       <img
-        alt="Descargar informe completo"
+        :alt="$i18n.t('metabase.buttons.download')"
         src="../../assets/icons/download.png"
         style="cursor: pointer;"
         width="60"
@@ -93,6 +118,7 @@ export default {
   name: 'CovidContainer',
   data() {
     return {
+      covidDashboard: true,
       fileIsValid: false,
       iframeUrl: null,
       isLoadingFileUpload: false,
@@ -122,10 +148,16 @@ export default {
         this.showUploadFileContainer();
       }
     },
+    dashboardToggle() {
+      const { covidDashboard } = this;
+      this.covidDashboard = !covidDashboard;
+      this.generateMetabaseTokenUrl();
+    },
     generateMetabaseTokenUrl() {
+      const { covidDashboard } = this;
       const payload = {
         resource: {
-          dashboard: 5,
+          dashboard: covidDashboard ? 5 : 6,
         },
         params: {
         },

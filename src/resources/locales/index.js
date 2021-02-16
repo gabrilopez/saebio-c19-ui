@@ -1,13 +1,17 @@
-import VueI18n from 'vue-i18n';
-import localeEn from './es';
+import {
+  createI18n,
+} from 'vue-i18n';
+import es from '@/resources/locales/es';
+import en from '@/resources/locales/en';
 
-const locale = 'es';
-const i18n = new VueI18n({
-  locale,
-  messages: {
-    es: localeEn,
-  },
+const messages = {
+  es,
+  en,
+};
+
+const i18n = createI18n({
+  locale: 'es',
+  messages,
 });
 
-// eslint-disable-next-line import/prefer-default-export
-export { i18n };
+export default i18n;
