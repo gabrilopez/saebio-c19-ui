@@ -1,5 +1,9 @@
 const en = {
   backups: {
+    databaseChangeMessage: 'The database will change to {name}. Are you willing to proceed?',
+    databaseChangeTitle: 'Confirm database change',
+    file: 'File',
+    filesFound: '{count} file(s) found',
     numberOfSamples: 'Number of samples',
     size: 'Size',
   },
@@ -21,6 +25,12 @@ const en = {
       covid: 'Covid-19',
       label: 'Covid statistics',
       samples: 'Samples',
+    },
+  },
+  modals: {
+    buttons: {
+      accept: 'Aceptar',
+      cancel: 'Cancelar',
     },
   },
   saebio: 'Saebio',
