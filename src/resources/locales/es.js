@@ -1,12 +1,13 @@
 const es = {
   /* BACKUPS */
   backups: {
-    databaseChangeMessage: 'Se cambiará la base de datos a {name}. ¿Desea continuar?',
+    databaseChangeMessage: 'Se cambiará la base de datos a {name}. La actual base de datos se perderá, ¿Desea continuar?',
     databaseChangeTitle: 'Confirme el cambio de base de datos',
     file: 'Archivo',
     filesFound: '{count} archivo(s) encontrados',
     numberOfSamples: 'Número de muestras',
     size: 'Tamaño',
+    unknown: 'Desconocido',
   },
 
   /* METABASE */

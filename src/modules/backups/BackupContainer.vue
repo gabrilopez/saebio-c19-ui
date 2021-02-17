@@ -7,14 +7,20 @@
         :key="index.toString(10)"
         style="margin-top: 10px;"
       >
-        <div class="notice" :style="{'border-color': backupHSL(backup)}">
-          <strong :style="{'color': backupHSL(backup)}">{{ backupName(backup) }}</strong>
-          <span>
-            {{ $i18n.t('backups.numberOfSamples') }}: {{ backupRows(backup) }}
-          </span>
-          <span>
-            {{ $i18n.t('backups.size') }}: {{ backup.size }}
-          </span>
+        <div class="notice" :style="{'border-color': backup.selected ? 'gray' : backupHSL(backup)}">
+          <div class="notice-piece">
+            <strong :style="{'color': backup.selected ? 'gray' : '#a5a5a5'}">{{ backupName(backup) }}</strong>
+          </div>
+          <div class="notice-piece">
+            <span>
+              {{ $i18n.t('backups.numberOfSamples') }}: {{ backupRows(backup) }}
+            </span>
+          </div>
+          <div class="notice-piece">
+            <span>
+              {{ $i18n.t('backups.size') }}: {{ backup.size }}
+            </span>
+          </div>
           <div class="round">
             <input
               :id="[`checkbox-${backup.name}`]"
@@ -61,13 +67,13 @@ export default {
   },
   methods: {
     backupHSL(backup) {
-      const { name } = backup;
+      const string = JSON.stringify(backup);
       let cont = 0;
-      for (let i = 0; i < name.length; i += 1) {
-        cont += name.charCodeAt(i);
+      for (let i = 0; i < string.length; i += 1) {
+        cont += string.charCodeAt(i);
       }
-      cont += name.length * name.length;
-      return `hsl(${(cont % 360) + (this.backupRows(backup) % 360)}, 100%, 50%)`;
+      cont += string.length * string.length;
+      return `hsl(${(cont % 360)}, 100%, 50%)`;
     },
     backupName(backup) {
       const { name } = backup;
@@ -76,10 +82,24 @@ export default {
         : this.$t('backups.file');
     },
     backupRows(backup) {
-      const { name } = backup;
-      return name ? name.substring(0, name.indexOf(' ')) : 0;
+      const { rows } = backup;
+      return rows || this.$t('backups.unknown');
     },
     changeBackup() {
+      const data = this.newBackup;
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      };
+      globalAxios.post('http://localhost:4567/change-database-to-backup', data, config)
+        .then((response) => {
+          console.log('SUCCESS', response);
+          this.getBackups();
+        })
+        .catch((error) => {
+          console.log('ERROR', error);
+        });
       // TODO: CHANGE BACKUP
       // const { newBackup } = this;
       // Petición

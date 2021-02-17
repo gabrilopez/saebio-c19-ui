@@ -25,6 +25,10 @@
     font-size: large;
 }
 
+.notice-piece {
+    width: 30%;
+}
+
 .round {
     position: relative;
 }

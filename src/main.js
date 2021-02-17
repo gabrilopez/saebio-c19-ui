@@ -5,7 +5,7 @@ import {
 import i18n from '@/resources/locales';
 import Router from '@/resources/router';
 
-import App from './App.vue';
+import App from '@/App.vue';
 
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';

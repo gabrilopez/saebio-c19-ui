@@ -1,11 +1,12 @@
 const en = {
   backups: {
-    databaseChangeMessage: 'The database will change to {name}. Are you willing to proceed?',
+    databaseChangeMessage: 'The database will change to {name}. Current database will be lost, are you willing to proceed?',
     databaseChangeTitle: 'Confirm database change',
     file: 'File',
     filesFound: '{count} file(s) found',
     numberOfSamples: 'Number of samples',
     size: 'Size',
+    unknown: 'Unknown',
   },
   metabase: {
     alt: {
