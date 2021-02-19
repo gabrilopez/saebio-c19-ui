@@ -17,7 +17,7 @@ const index = createRouter({
     },
     {
       path: '/backups',
-      name: 'backups',
+      name: 'backups-container',
       component: BackupContainer,
     },
   ],

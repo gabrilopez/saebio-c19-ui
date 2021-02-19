@@ -1,7 +1,39 @@
 <template>
   <div>
+    <div class="covid-navbar">
+      <div class="row" style="justify-self: flex-start; align-items: center;">
+        <div class="dropdown-menu">
+          <router-link
+            :to="{ name: 'covid-container' }"
+          >
+            {{ $i18n.t('navbar.covidLabel') }}
+          </router-link>
+        </div>
+        <button
+          id="dropdown-toggle"
+          style="all: unset;"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          <img src="../../assets/icons/menu.png" width="24" height="24" alt="Menu">
+        </button>
+        <p class="h6 navbar-label">
+          {{ $i18n.t('navbar.backupsLabel') }}
+        </p>
+      </div>
+      <div>
+        <img
+          src="../../assets/icons/refresh.png"
+          width="24"
+          height="24"
+          :alt="$i18n.t('metabase.alt.refresh')"
+          @click="getBackups"
+        >
+      </div>
+    </div>
     <div class="notice-container">
-      <span>{{ message }}</span>
+      <span>{{ backupList ? $i18n.t('backups.filesFound', { count: backupList.length }) : null }}</span>
       <div
         v-for="(backup, index) in backupList"
         :key="index.toString(10)"
@@ -45,7 +77,6 @@
 </template>
 
 <script>
-import globalAxios from 'axios';
 import AcceptCancelModal from '@/components/modals/AcceptCancelModal';
 
 export default {
@@ -55,12 +86,15 @@ export default {
   },
   data() {
     return {
-      backupList: [],
-      message: '',
       newBackup: {
       },
       showChangeBackupModal: false,
     };
+  },
+  computed: {
+    backupList() {
+      return this.$store.getters['BackupsStore/getBackupList'];
+    },
   },
   mounted() {
     this.getBackups();
@@ -86,20 +120,23 @@ export default {
       return rows || this.$t('backups.unknown');
     },
     changeBackup() {
-      const data = this.newBackup;
+      this.$store.dispatch('BackupsStore/changeDatabaseToBackup', this.newBackup);
+      /*
+      const postData = this.newBackup;
       const config = {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       };
-      globalAxios.post('http://localhost:4567/change-database-to-backup', data, config)
+      globalAxios.post('http://localhost:4567/change-database-to-backup', postData, config)
         .then((response) => {
+          const { data } = response;
+          this.backupList = data.data;
           console.log('SUCCESS', response);
-          this.getBackups();
         })
         .catch((error) => {
           console.log('ERROR', error);
-        });
+        }); */
       // TODO: CHANGE BACKUP
       // const { newBackup } = this;
       // Petición
@@ -108,6 +145,8 @@ export default {
       this.showChangeBackupModal = false;
     },
     getBackups() {
+      this.$store.dispatch('BackupsStore/getBackups');
+      /*
       const config = {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -117,14 +156,11 @@ export default {
         .then((result) => {
           const { data } = result;
           this.backupList = data.data;
-          this.message = this.$i18n.t('backups.filesFound', {
-            count: this.backupList.length,
-          });
           console.log('RESULT DATA:', data);
         })
         .catch((error) => {
           console.log(error);
-        });
+        }); */
     },
     openChangeBackupModal() {
       this.showChangeBackupModal = true;

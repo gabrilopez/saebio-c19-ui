@@ -25,11 +25,6 @@ const es = {
     messages: {
       uploadFileError: 'Ha ocurrido un error al conectar con el servidor. Por favor, inténtelo de nuevo más tarde',
     },
-    navbar: {
-      covid: 'Covid-19',
-      label: 'Estadísticas covid',
-      samples: 'Muestras',
-    },
   },
 
   /* MODALS */
@@ -39,6 +34,16 @@ const es = {
       cancel: 'Cancelar',
     },
   },
+
+  /* NAVBAR */
+  navbar: {
+    backups: 'Copias de seguridad',
+    backupsLabel: 'Copias de seguridad de la base de datos',
+    covid: 'Covid-19',
+    covidLabel: 'Estadísticas covid',
+    samples: 'Muestras',
+  },
+
   saebio: 'Saebio',
 };
 

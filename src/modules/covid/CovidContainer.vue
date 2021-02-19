@@ -8,7 +8,7 @@
             style="cursor: pointer;"
             @click="dashboardToggle"
           >
-            {{ covidDashboard ? $i18n.t('metabase.navbar.samples') : $i18n.t('metabase.navbar.covid') }}
+            {{ covidDashboard ? $i18n.t('navbar.samples') : $i18n.t('navbar.covid') }}
           </a>
         </div>
         <button
@@ -20,8 +20,8 @@
         >
           <img src="../../assets/icons/menu.png" width="24" height="24" alt="Menu">
         </button>
-        <p class="h6" style="font-size: 10px; padding: 0; margin: 0 10px; text-transform: uppercase;">
-          {{ $i18n.t('metabase.navbar.label') }}
+        <p class="h6 navbar-label">
+          {{ $i18n.t('navbar.covidLabel') }}
         </p>
       </div>
       <div>
