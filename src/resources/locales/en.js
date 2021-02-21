@@ -1,11 +1,15 @@
 const en = {
   /* BACKUPS */
   backups: {
+    createBackup: 'Create backup',
+    currentDatabase: 'Current database',
     databaseChangeMessage: 'The database will change to {name}. Current database will be lost, are you willing to proceed?',
     databaseChangeTitle: 'Confirm database change',
     file: 'File',
     filesFound: '{count} file(s) found',
     numberOfSamples: 'Number of samples',
+    removeBackupMessage: 'Backup {name} will be removed. This cannot be undone, are you willing to proceed?',
+    removeBackupTitle: 'Confirm backup deletion',
     size: 'Size',
     unknown: 'Unknown',
   },

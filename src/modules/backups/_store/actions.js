@@ -1,5 +1,38 @@
 import * as Api from '@/services/api';
 
+const changeDatabaseToBackup = ({ dispatch }, postData) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+  };
+  const changeDatabaseToBackupApi = Api.changeDatabaseToBackup(postData, config);
+  changeDatabaseToBackupApi.then((response) => {
+    const { data } = response;
+    dispatch('setBackupList', data.data);
+    console.log(response);
+  }).catch((error) => {
+    console.log(error);
+  });
+};
+
+const forceBackup = ({ dispatch }) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+  };
+  const forceBackupApi = Api.forceBackup({
+  }, config);
+  forceBackupApi.then((response) => {
+    const { data } = response;
+    dispatch('setBackupList', data.data);
+    console.log(response);
+  }).catch((error) => {
+    console.log(error);
+  });
+};
+
 const getBackups = ({ dispatch }) => {
   const getBackupsApi = Api.getBackups({
   });
@@ -12,22 +45,20 @@ const getBackups = ({ dispatch }) => {
   });
 };
 
-const changeDatabaseToBackup = ({ dispatch }, postData) => {
+const removeBackup = ({ dispatch }, postData) => {
   const config = {
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/x-www-form-urlencoded',
     },
   };
-  const changeDatabaseToBackupApi = Api.changeDatabaseToBackup(postData, config);
-  changeDatabaseToBackupApi
-    .then((response) => {
-      const { data } = response;
-      dispatch('setBackupList', data.data);
-      console.log(response);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  const removeBackupApi = Api.removeBackup(postData, config);
+  removeBackupApi.then((response) => {
+    const { data } = response;
+    dispatch('setBackupList', data.data);
+    console.log('API REMOVE BACKUP SUCCESS', response);
+  }).catch((error) => {
+    console.log('error', error);
+  });
 };
 
 const setBackupList = ({ commit }, backupList) => {
@@ -36,6 +67,8 @@ const setBackupList = ({ commit }, backupList) => {
 
 export default {
   changeDatabaseToBackup,
+  forceBackup,
   getBackups,
+  removeBackup,
   setBackupList,
 };

@@ -29,6 +29,12 @@
     width: 30%;
 }
 
+.notice-icon-piece {
+    width: 10%;
+    display: flex;
+    justify-content: space-around;
+}
+
 .round {
     position: relative;
 }
@@ -57,6 +63,11 @@
     top: 8px;
     transform: rotate(-45deg);
     width: 12px;
+}
+
+.round-red label{
+    background-color: #ff6961;
+    border-color: #ff6961;
 }
 
 .round input[type="checkbox"] {

@@ -33,7 +33,15 @@
       </div>
     </div>
     <div class="notice-container">
-      <span>{{ backupList ? $i18n.t('backups.filesFound', { count: backupList.length }) : null }}</span>
+      <div style="display: flex; justify-content: space-between;">
+        <span>{{ backupList ? $i18n.t('backups.filesFound', { count: backupList.length }) : null }}</span>
+        <button
+          class="btn-primary btn"
+          @click="forceBackup"
+        >
+          {{ $i18n.t('backups.createBackup') }}
+        </button>
+      </div>
       <div
         v-for="(backup, index) in backupList"
         :key="index.toString(10)"
@@ -53,15 +61,33 @@
               {{ $i18n.t('backups.size') }}: {{ backup.size }}
             </span>
           </div>
-          <div class="round">
-            <input
-              :id="[`checkbox-${backup.name}`]"
-              :checked="backup.selected"
-              type="checkbox"
-              @click="selectBackup(backup)"
-              @click.prevent
+          <div class="notice-icon-piece">
+            <div class="round">
+              <input
+                :id="[`checkbox-${backup.name}`]"
+                :checked="backup.selected"
+                type="checkbox"
+                @click="selectBackup(backup)"
+                @click.prevent
+              >
+              <label :for="[`checkbox-${backup.name}`]" />
+            </div>
+            <div v-if="backup.selected"></div>
+            <div
+              v-if="!backup.selected"
+              class="round round-red"
+              @click="selectBackupToRemove(backup)"
             >
-            <label :for="[`checkbox-${backup.name}`]" />
+              <div/>
+              <label :for="[`delete-${backup.name}`]" style="justify-content: center; align-items: center; display: flex;">
+                <img
+                  src="../../assets/icons/delete.png"
+                  style="position: absolute; z-index: 1;"
+                  width="16"
+                  height="16"
+                >
+              </label>
+            </div>
           </div>
         </div>
       </div>
@@ -73,11 +99,19 @@
       @accept="changeBackup"
       @close="closeChangeBackupModal"
     />
+    <accept-cancel-modal
+      v-if="showRemoveBackupModal"
+      :title="$i18n.t('backups.removeBackupTitle')"
+      :body="$i18n.t('backups.removeBackupMessage', { name: backupName(backupToRemove) })"
+      @accept="removeBackup"
+      @close="closeRemoveBackupModal"
+    />
   </div>
 </template>
 
 <script>
 import AcceptCancelModal from '@/components/modals/AcceptCancelModal';
+import moment from 'moment';
 
 export default {
   name: 'BackupContainer',
@@ -88,12 +122,23 @@ export default {
     return {
       newBackup: {
       },
+      backupToRemove: {
+      },
       showChangeBackupModal: false,
+      showRemoveBackupModal: false,
     };
   },
   computed: {
     backupList() {
       return this.$store.getters['BackupsStore/getBackupList'];
+    },
+    locale() {
+      return this.$i18n.locale;
+    },
+  },
+  watch: {
+    locale(newVal) {
+      moment.locale = newVal;
     },
   },
   mounted() {
@@ -101,19 +146,22 @@ export default {
   },
   methods: {
     backupHSL(backup) {
+      const { rows } = backup;
       const string = JSON.stringify(backup);
       let cont = 0;
       for (let i = 0; i < string.length; i += 1) {
         cont += string.charCodeAt(i);
       }
       cont += string.length * string.length;
-      return `hsl(${(cont % 360)}, 100%, 50%)`;
+      return `hsl(${((cont + rows) % 360)}, 100%, 50%)`;
     },
     backupName(backup) {
-      const { name } = backup;
-      return name
-        ? name.substring(name.indexOf('-') + 1, name.length).replace('.db', '')
-        : this.$t('backups.file');
+      const { name, selected } = backup;
+      if (selected) return this.$t('backups.currentDatabase');
+      moment.locale(this.$i18n.locale);
+      const dateString = name.substring(name.indexOf(' ') + 1, name.length).replace('.db', '').replaceAll('-', '/').replaceAll('.', ':');
+      const momentObj = moment(dateString, 'DD-MM-YYYY hh:mm:ss');
+      return momentObj.isValid() ? momentObj.format('dddd, DD MMMM YYYY (hh:mm a)') : this.$t('backups.file');
     },
     backupRows(backup) {
       const { rows } = backup;
@@ -144,6 +192,12 @@ export default {
     closeChangeBackupModal() {
       this.showChangeBackupModal = false;
     },
+    closeRemoveBackupModal() {
+      this.showRemoveBackupModal = false;
+    },
+    forceBackup() {
+      this.$store.dispatch('BackupsStore/forceBackup');
+    },
     getBackups() {
       this.$store.dispatch('BackupsStore/getBackups');
       /*
@@ -165,10 +219,21 @@ export default {
     openChangeBackupModal() {
       this.showChangeBackupModal = true;
     },
+    openRemoveBackupModal() {
+      this.showRemoveBackupModal = true;
+    },
+    removeBackup() {
+      this.$store.dispatch('BackupsStore/removeBackup', this.backupToRemove);
+    },
     selectBackup(backup) {
       if (backup.selected) return;
       this.newBackup = backup;
       this.openChangeBackupModal();
+    },
+    selectBackupToRemove(backup) {
+      if (backup.selected) return;
+      this.backupToRemove = backup;
+      this.openRemoveBackupModal();
     },
   },
 };

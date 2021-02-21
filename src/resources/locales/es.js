@@ -1,11 +1,15 @@
 const es = {
   /* BACKUPS */
   backups: {
+    createBackup: 'Crear copia de seguridad',
+    currentDatabase: 'Base de datos actual',
     databaseChangeMessage: 'Se cambiará la base de datos a {name}. La actual base de datos se perderá, ¿Desea continuar?',
     databaseChangeTitle: 'Confirme el cambio de base de datos',
     file: 'Archivo',
     filesFound: '{count} archivo(s) encontrados',
     numberOfSamples: 'Número de muestras',
+    removeBackupMessage: 'La copia de seguridad {name} será eliminada. Esta operación no se puede deshacer, ¿Desea continuar?',
+    removeBackupTitle: 'Confirme el borrado de la copia de seguridad',
     size: 'Tamaño',
     unknown: 'Desconocido',
   },
