@@ -1,6 +1,7 @@
 const en = {
   /* BACKUPS */
   backups: {
+    connectionError: 'Server petition error',
     createBackup: 'Create backup',
     currentDatabase: 'Current database',
     databaseChangeMessage: 'The database will change to {name}. Current database will be lost, are you willing to proceed?',
@@ -43,9 +44,9 @@ const en = {
   navbar: {
     backups: 'Backups',
     backupsLabel: 'Database backups',
-    covid: 'Covid-19',
+    covidDashboard: 'Covid-19',
     covidLabel: 'Covid statistics',
-    samples: 'Samples',
+    samplesDashboard: 'Samples',
   },
 
   saebio: 'Saebio',

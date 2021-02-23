@@ -1,6 +1,6 @@
 import globalAxios from 'axios';
 
-const host = 'http://localhost:4567';
+const host = process.env.VUE_APP_API_HOST_URL;
 
 export const changeDatabaseToBackup = (data, config) => globalAxios.post(`${host}/change-database-to-backup`, data, config);
 

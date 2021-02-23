@@ -4,7 +4,8 @@
       <div class="row" style="justify-self: flex-start; align-items: center;">
         <div class="dropdown-menu">
           <router-link
-            :to="{ name: 'covid-container' }"
+            class="dropdown-item"
+            :to="{ name: 'metabase-container' }"
           >
             {{ $i18n.t('navbar.covidLabel') }}
           </router-link>
@@ -34,8 +35,12 @@
     </div>
     <div class="notice-container">
       <div style="display: flex; justify-content: space-between;">
-        <span>{{ backupList ? $i18n.t('backups.filesFound', { count: backupList.length }) : null }}</span>
+        <span>{{ loadBackupsError
+          ? $i18n.t('backups.connectionError')
+          : $i18n.t('backups.filesFound', { count: backupList.length }) }}
+        </span>
         <button
+          :disabled="loadBackupsError"
           class="btn-primary btn"
           @click="forceBackup"
         >
@@ -72,13 +77,13 @@
               >
               <label :for="[`checkbox-${backup.name}`]" />
             </div>
-            <div v-if="backup.selected"></div>
+            <div v-if="backup.selected" />
             <div
               v-if="!backup.selected"
               class="round round-red"
               @click="selectBackupToRemove(backup)"
             >
-              <div/>
+              <div />
               <label :for="[`delete-${backup.name}`]" style="justify-content: center; align-items: center; display: flex;">
                 <img
                   src="../../assets/icons/delete.png"
@@ -132,6 +137,9 @@ export default {
     backupList() {
       return this.$store.getters['BackupsStore/getBackupList'];
     },
+    loadBackupsError() {
+      return this.$store.getters['BackupsStore/getLoadBackupsError'];
+    },
     locale() {
       return this.$i18n.locale;
     },
@@ -169,25 +177,6 @@ export default {
     },
     changeBackup() {
       this.$store.dispatch('BackupsStore/changeDatabaseToBackup', this.newBackup);
-      /*
-      const postData = this.newBackup;
-      const config = {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      };
-      globalAxios.post('http://localhost:4567/change-database-to-backup', postData, config)
-        .then((response) => {
-          const { data } = response;
-          this.backupList = data.data;
-          console.log('SUCCESS', response);
-        })
-        .catch((error) => {
-          console.log('ERROR', error);
-        }); */
-      // TODO: CHANGE BACKUP
-      // const { newBackup } = this;
-      // Petición
     },
     closeChangeBackupModal() {
       this.showChangeBackupModal = false;
@@ -200,21 +189,6 @@ export default {
     },
     getBackups() {
       this.$store.dispatch('BackupsStore/getBackups');
-      /*
-      const config = {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      };
-      globalAxios.get('http://localhost:4567/backups', config)
-        .then((result) => {
-          const { data } = result;
-          this.backupList = data.data;
-          console.log('RESULT DATA:', data);
-        })
-        .catch((error) => {
-          console.log(error);
-        }); */
     },
     openChangeBackupModal() {
       this.showChangeBackupModal = true;

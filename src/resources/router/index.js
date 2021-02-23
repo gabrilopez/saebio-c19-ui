@@ -4,16 +4,16 @@ import {
 } from 'vue-router';
 
 // Components
-import CovidContainer from '@/modules/covid/CovidContainer';
+import MetabaseContainer from '@/modules/covid/MetabaseContainer';
 import BackupContainer from '@/modules/backups/BackupContainer';
 
 const index = createRouter({
   history: createWebHistory(),
   routes: [
     {
-      path: '/covid',
-      name: 'covid-container',
-      component: CovidContainer,
+      path: '/metabase',
+      name: 'metabase-container',
+      component: MetabaseContainer,
     },
     {
       path: '/backups',

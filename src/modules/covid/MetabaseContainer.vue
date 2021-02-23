@@ -4,12 +4,27 @@
       <div class="row" style="justify-self: flex-start; align-items: center;">
         <div class="dropdown-menu">
           <a
+            v-if="dashboard !== metabaseDashboards.COVID_DASHBOARD"
             class="dropdown-item"
             style="cursor: pointer;"
-            @click="dashboardToggle"
+            @click="changeDashboard(metabaseDashboards.COVID_DASHBOARD)"
           >
-            {{ covidDashboard ? $i18n.t('navbar.samples') : $i18n.t('navbar.covid') }}
+            {{ $i18n.t('navbar.covidDashboard') }}
           </a>
+          <a
+            v-if="dashboard !== metabaseDashboards.SAMPLES_DASHBOARD"
+            class="dropdown-item"
+            style="cursor: pointer;"
+            @click="changeDashboard(metabaseDashboards.SAMPLES_DASHBOARD)"
+          >
+            {{ $i18n.t('navbar.samplesDashboard') }}
+          </a>
+          <router-link
+            :to="{ name: 'backups-container' }"
+            class="dropdown-item"
+          >
+            {{ $i18n.t('navbar.backupsLabel') }}
+          </router-link>
         </div>
         <button
           id="dropdown-toggle"
@@ -18,31 +33,33 @@
           aria-haspopup="true"
           aria-expanded="false"
         >
-          <img src="../../assets/icons/menu.png" width="24" height="24" alt="Menu">
+          <fa class="navbar-icon" :icon="['fas', 'bars']" size="lg" />
         </button>
         <p class="h6 navbar-label">
           {{ $i18n.t('navbar.covidLabel') }}
         </p>
       </div>
       <div>
-        <img
-          src="../../assets/icons/upload.png"
-          width="28"
-          height="28"
-          :alt="$i18n.t('metabase.alt.upload')"
+        <fa
+          class="navbar-icon"
+          :icon="['fas', 'file-upload']"
+          size="lg"
           @click="showUploadFileContainer"
-        >
-        <img
-          src="../../assets/icons/refresh.png"
-          width="24"
-          height="24"
-          :alt="$i18n.t('metabase.alt.refresh')"
+        />
+        <fa
+          class="navbar-icon"
+          :icon="['fas', 'sync-alt']"
+          size="lg"
           @click="refreshMetabase"
-        >
+        />
       </div>
     </div>
     <div v-if="uploadFileContainer && !printMode">
-      <form v-if="!uploadErrorMessage && !uploadSuccessMessage" enctype="multipart/form-data" @submit.prevent="uploadFile">
+      <form
+        v-if="!showUploadErrorMessage && !showUploadSuccessMessage"
+        enctype="multipart/form-data"
+        @submit.prevent="uploadFile"
+      >
         <div id="upload-file-container" class="upload-file-container">
           <input id="file" type="file" accept=".csv" @change="checkValid">
           <button
@@ -55,7 +72,7 @@
           </button>
         </div>
       </form>
-      <div v-if="uploadErrorMessage" class="col-12">
+      <div v-if="showUploadErrorMessage" class="col-12">
         <p>{{ $i18n.t('metabase.messages.uploadFileError') }}</p>
         <button
           class="bn btn-dark m-3"
@@ -64,7 +81,7 @@
           {{ $i18n.t('metabase.buttons.tryAgain') }}
         </button>
       </div>
-      <div v-if="uploadSuccessMessage" class="col-12">
+      <div v-if="showUploadSuccessMessage" class="col-12">
         <p>TODO: AÑADIR MENSAJE DEL SERVIDOR</p>
         <button
           class="bn btn-dark m-3"
@@ -75,10 +92,10 @@
       </div>
       <div v-if="isLoadingFileUpload" class="spinner-border" />
     </div>
-    <div v-if="iframeUrl" id="metabase-container" class="metabase-container">
+    <div v-if="dashboardUrl" id="metabase-container" class="metabase-container">
       <iframe
         id="metabase-content"
-        :src="iframeUrl"
+        :src="dashboardUrl"
         frameborder="0"
         scrolling="no"
         style="height: 100%; width: 100%;"
@@ -94,44 +111,51 @@
         width="64"
         height="32"
       >
-      <img
-        :alt="$i18n.t('metabase.buttons.download')"
-        src="../../assets/icons/download.png"
+      <fa
         style="cursor: pointer;"
-        width="60"
-        height="49"
+        :icon="['fas', 'cloud-download-alt']"
+        size="lg"
         @click="saveToPDF"
-      >
+      />
     </div>
   </div>
 </template>
 
 <script>
-import globalAxios from 'axios';
-
-const jwt = require('jsonwebtoken');
-
-const METABASE_SITE_URL = 'http://localhost:3000';
-const METABASE_SECRET_KEY = '8bae34dd8f74efb53e6cbe0b5369ef2f4c327e916e5cc895994ea04c7c7f8984';
+import * as MetabaseDashboards from '@/resources/types/MetabaseDashboards';
 
 export default {
-  name: 'CovidContainer',
+  name: 'MetabaseContainer',
   data() {
     return {
-      covidDashboard: true,
       fileIsValid: false,
-      iframeUrl: null,
+      metabaseDashboards: MetabaseDashboards,
       isLoadingFileUpload: false,
       printMode: false,
       uploadFileContainer: false,
-      uploadErrorMessage: false,
-      uploadSuccessMessage: false,
     };
+  },
+  computed: {
+    dashboard() {
+      return this.$store.getters['MetabaseStore/getDashboard'];
+    },
+    dashboardUrl() {
+      return this.$store.getters['MetabaseStore/getDashboardUrl'];
+    },
+    showUploadErrorMessage() {
+      return this.$store.getters['MetabaseStore/getShowUploadErrorMessage'];
+    },
+    showUploadSuccessMessage() {
+      return this.$store.getters['MetabaseStore/getShowUploadSuccessMessage'];
+    },
   },
   mounted() {
     this.generateMetabaseTokenUrl();
   },
   methods: {
+    changeDashboard(dashboard) {
+      this.$store.dispatch('MetabaseStore/setDashboard', dashboard);
+    },
     checkValid() {
       const csvFile = document.querySelector('#file');
       this.fileIsValid = csvFile && csvFile.files[0];
@@ -139,8 +163,8 @@ export default {
     clearFileUpload(close) {
       const csvFile = document.querySelector('#file');
       if (csvFile && csvFile.files) csvFile.value = '';
-      this.uploadErrorMessage = false;
-      this.uploadSuccessMessage = false;
+      this.$store.dispatch('MetabaseStore/setShowUploadErrorMessage', false);
+      this.$store.dispatch('MetabaseStore/setShowUploadSuccessMessage', false);
 
       if (close) {
         this.uploadFileContainer = false;
@@ -148,12 +172,9 @@ export default {
         this.showUploadFileContainer();
       }
     },
-    dashboardToggle() {
-      const { covidDashboard } = this;
-      this.covidDashboard = !covidDashboard;
-      this.generateMetabaseTokenUrl();
-    },
     generateMetabaseTokenUrl() {
+      this.$store.dispatch('MetabaseStore/generateMetabaseTokenUrl');
+      /*
       const { covidDashboard } = this;
       const payload = {
         resource: {
@@ -164,15 +185,16 @@ export default {
         exp: Math.round(Date.now() / 1000) + (10 * 60), // 10 minute expiration
       };
       const token = jwt.sign(payload, METABASE_SECRET_KEY);
-      this.iframeUrl = `${METABASE_SITE_URL}/embed/dashboard/${token}#bordered=false&titled=false&refresh=60`;
+      this.iframeUrl = `${METABASE_SITE_URL}/embed/dashboard/${token}#bordered=false&titled=false&refresh=60`; */
     },
     refreshMetabase() {
       const iFrame = document.getElementById('metabase-content');
       if (iFrame) {
         this.generateMetabaseTokenUrl();
+        /*
         this.$nextTick(() => {
-          iFrame.src = this.iframeUrl;
-        });
+          iFrame.src = this.dashboardUrl;
+        }); */
       }
     },
     saveToPDF() {
@@ -202,22 +224,7 @@ export default {
       const formData = new FormData();
       const csvFile = document.querySelector('#file');
       formData.append('file', csvFile.files[0]);
-      const config = {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      };
-      globalAxios.post('http://localhost:4567/insert-data', formData, config)
-        .then((data) => {
-          console.log(data);
-          this.isLoadingFileUpload = false;
-          this.uploadSuccessMessage = true;
-        })
-        .catch((error) => {
-          console.log(error);
-          this.isLoadingFileUpload = false;
-          this.uploadErrorMessage = true;
-        });
+      this.$store.dispatch('MetabaseStore/uploadSamples', formData);
     },
   },
 };

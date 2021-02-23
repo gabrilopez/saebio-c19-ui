@@ -1,6 +1,7 @@
 const es = {
   /* BACKUPS */
   backups: {
+    connectionError: 'Error en la petición al servidor',
     createBackup: 'Crear copia de seguridad',
     currentDatabase: 'Base de datos actual',
     databaseChangeMessage: 'Se cambiará la base de datos a {name}. La actual base de datos se perderá, ¿Desea continuar?',
@@ -43,9 +44,9 @@ const es = {
   navbar: {
     backups: 'Copias de seguridad',
     backupsLabel: 'Copias de seguridad de la base de datos',
-    covid: 'Covid-19',
+    covidDashboard: 'Covid-19',
     covidLabel: 'Estadísticas covid',
-    samples: 'Muestras',
+    samplesDashboard: 'Muestras',
   },
 
   saebio: 'Saebio',

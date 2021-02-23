@@ -4,6 +4,7 @@ import mutations from '@/modules/backups/_store/mutations';
 
 const state = {
   backupList: [],
+  loadBackupsError: false,
 };
 
 export default {
