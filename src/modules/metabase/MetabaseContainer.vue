@@ -74,15 +74,17 @@
               />
               <div v-if="!fileSelected">{{ $i18n.t('metabase.messages.selectFile') }}</div>
               <div v-if="!fileIsValid && fileSelected">{{ $i18n.t('metabase.messages.selectFileError') }}</div>
-              <div v-if="fileSelected" style="justify-content: center; margin-top: 5vh;">
+              <div v-if="fileSelected" style="justify-content: center; margin-top: 1vh;">
                 <strong id="file-name" style="display: block;" />
                 <button
+                  v-if="!loadingSamples"
                   :disabled="!fileIsValid"
                   class="btn btn-dark m-3"
                   type="submit"
                 >
                   {{ $i18n.t('metabase.buttons.send') }}
                 </button>
+                <div v-if="loadingSamples" class="spinner-border" />
               </div>
             </div>
           </label>
@@ -105,7 +107,6 @@
             {{ $i18n.t('metabase.buttons.close') }}
           </button>
         </div>
-        <div v-if="loadingSamples" class="spinner-border" />
       </div>
     </div>
     <div v-if="dashboardUrl" id="metabase-container" class="metabase-container">
@@ -177,6 +178,7 @@ export default {
   methods: {
     changeDashboard(dashboard) {
       this.$store.dispatch('MetabaseStore/setDashboard', dashboard);
+      this.refreshMetabase();
     },
     checkValid() {
       const csvFile = document.querySelector('#file');
@@ -213,6 +215,7 @@ export default {
     refreshMetabase() {
       const iFrame = document.getElementById('metabase-content');
       if (iFrame) {
+        iFrame.src = '';
         this.generateMetabaseTokenUrl();
       }
     },
@@ -262,9 +265,6 @@ ul {
 li {
   display: inline-block;
   margin: 0 10px;
-}
-a {
-  color: #42b983;
 }
 input[type="file"] {
   display: none;

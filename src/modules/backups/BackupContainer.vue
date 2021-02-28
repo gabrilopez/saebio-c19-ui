@@ -6,6 +6,7 @@
           <router-link
             class="dropdown-item"
             :to="{ name: 'metabase-container' }"
+            style="cursor: pointer;"
           >
             {{ $i18n.t('navbar.covidLabel') }}
           </router-link>
@@ -17,20 +18,19 @@
           aria-haspopup="true"
           aria-expanded="false"
         >
-          <img src="../../assets/icons/menu.png" width="24" height="24" alt="Menu">
+          <fa class="navbar-icon" :icon="['fas', 'bars']" size="lg" />
         </button>
         <p class="h6 navbar-label">
           {{ $i18n.t('navbar.backupsLabel') }}
         </p>
       </div>
       <div>
-        <img
-          src="../../assets/icons/refresh.png"
-          width="24"
-          height="24"
-          :alt="$i18n.t('metabase.alt.refresh')"
+        <fa
+          class="navbar-icon"
+          :icon="['fas', 'sync-alt']"
+          size="lg"
           @click="getBackups"
-        >
+        />
       </div>
     </div>
     <div class="notice-container">

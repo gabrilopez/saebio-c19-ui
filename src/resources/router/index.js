@@ -11,6 +11,10 @@ const index = createRouter({
   history: createWebHistory(),
   routes: [
     {
+      path: '/',
+      redirect: '/metabase',
+    },
+    {
       path: '/metabase',
       name: 'metabase-container',
       component: MetabaseContainer,
