@@ -18,10 +18,15 @@ const setShowUploadSuccessMessage = (state, payload) => {
   state.showUploadSuccessMessage = payload;
 };
 
+const setUploadSuccessMessage = (state, payload) => {
+  state.uploadSuccessMessage = payload;
+};
+
 export default {
   setDashboard,
   setDashboardUrl,
   setLoadingSamples,
   setShowUploadErrorMessage,
   setShowUploadSuccessMessage,
+  setUploadSuccessMessage,
 };

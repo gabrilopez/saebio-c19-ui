@@ -11,7 +11,7 @@ import {
   library,
 } from '@fortawesome/fontawesome-svg-core';
 import {
-  faCloudDownloadAlt, faFileUpload, faSyncAlt, faBars,
+  faCloudDownloadAlt, faFileUpload, faSyncAlt, faBars, faDownload,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   FontAwesomeIcon,
@@ -21,10 +21,10 @@ import App from '@/App.vue';
 
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '@/assets/covid-module.css';
+import '@/assets/metabase-module.css';
 import '@/assets/backups-module.css';
 
-library.add(faCloudDownloadAlt, faFileUpload, faSyncAlt, faBars);
+library.add(faCloudDownloadAlt, faFileUpload, faSyncAlt, faBars, faDownload);
 
 const app = createApp(App);
 app.use(i18n);

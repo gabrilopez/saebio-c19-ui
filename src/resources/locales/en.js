@@ -28,7 +28,10 @@ const en = {
       tryAgain: 'Try again',
     },
     messages: {
+      selectFile: 'Please select a file to upload',
+      selectFileError: 'File is not valid. Please choose a CSV file',
       uploadFileError: 'There was an error while connecting to the server. Please, try again later',
+      uploadFileServerMessage: 'Samples upload has finished. Added {added} samples, {errors} errors',
     },
   },
 

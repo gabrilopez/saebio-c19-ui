@@ -39,6 +39,10 @@ const setShowUploadSuccessMessage = ({ commit }, payload) => {
   commit('setShowUploadSuccessMessage', payload);
 };
 
+const setUploadSuccessMessage = ({ commit }, payload) => {
+  commit('setUploadSuccessMessage', payload);
+};
+
 const uploadSamples = ({ dispatch }, formData) => {
   const config = {
     headers: {
@@ -47,9 +51,16 @@ const uploadSamples = ({ dispatch }, formData) => {
   };
   const uploadSamplesApi = Api.uploadSamples(formData, config);
   uploadSamplesApi.then((response) => {
-    // TODO: INTENTAR AÑADIR MENSAJES CON BADGE
+    const { data } = response.data;
     dispatch('setLoadingSamples', false);
     dispatch('setShowUploadSuccessMessage', true);
+    dispatch('setUploadSuccessMessage', {
+      message: 'metabase.messages.uploadFileServerMessage',
+      params: {
+        added: data.added,
+        errors: data.errors,
+      },
+    });
     console.log(response);
   }).catch((error) => {
     dispatch('setLoadingSamples', false);
@@ -65,5 +76,6 @@ export default {
   setLoadingSamples,
   setShowUploadErrorMessage,
   setShowUploadSuccessMessage,
+  setUploadSuccessMessage,
   uploadSamples,
 };

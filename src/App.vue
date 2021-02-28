@@ -1,13 +1,13 @@
 <template>
   <div style="overflow-x: hidden;">
-    <!--<covid-container />-->
+    <!--<metabase-container />-->
     <router-view />
     <!--<backup-container />-->
   </div>
 </template>
 
 <script>
-// import CovidContainer from '@/modules/covid/CovidContainer';
+// import CovidContainer from '@/modules/metabase/CovidContainer';
 // import BackupContainer from '@/modules/backups/BackupContainer';
 
 export default {

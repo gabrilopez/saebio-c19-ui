@@ -28,7 +28,10 @@ const es = {
       tryAgain: 'Intentar de nuevo',
     },
     messages: {
+      selectFile: 'Seleccione un archivo para cargar su contenido',
+      selectFileError: 'Archivo no válido. Seleccione un archivo CSV para continuar',
       uploadFileError: 'Ha ocurrido un error al conectar con el servidor. Por favor, inténtelo de nuevo más tarde',
+      uploadFileServerMessage: 'La carga de muestras ha finalizado. Añadidas {added} muestras, {errors} errores',
     },
   },
 
@@ -45,7 +48,7 @@ const es = {
     backups: 'Copias de seguridad',
     backupsLabel: 'Copias de seguridad de la base de datos',
     covidDashboard: 'Covid-19',
-    covidLabel: 'Estadísticas covid',
+    covidLabel: 'Estadísticas metabase',
     samplesDashboard: 'Muestras',
   },
 

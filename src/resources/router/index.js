@@ -4,7 +4,7 @@ import {
 } from 'vue-router';
 
 // Components
-import MetabaseContainer from '@/modules/covid/MetabaseContainer';
+import MetabaseContainer from '@/modules/metabase/MetabaseContainer';
 import BackupContainer from '@/modules/backups/BackupContainer';
 
 const index = createRouter({

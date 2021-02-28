@@ -1,6 +1,6 @@
-import actions from '@/modules/covid/_store/actions';
-import getters from '@/modules/covid/_store/getters';
-import mutations from '@/modules/covid/_store/mutations';
+import actions from '@/modules/metabase/_store/actions';
+import getters from '@/modules/metabase/_store/getters';
+import mutations from '@/modules/metabase/_store/mutations';
 import * as MetabaseDashboards from '@/resources/types/MetabaseDashboards';
 
 const state = {
@@ -9,6 +9,7 @@ const state = {
   loadingSamples: false,
   showUploadErrorMessage: false,
   showUploadSuccessMessage: false,
+  uploadSuccessMessage: '',
 };
 
 export default {

@@ -44,7 +44,7 @@
           class="navbar-icon"
           :icon="['fas', 'file-upload']"
           size="lg"
-          @click="showUploadFileContainer"
+          @click="uploadFileContainer ? clearFileUpload(true) : showUploadFileContainer()"
         />
         <fa
           class="navbar-icon"
@@ -54,43 +54,59 @@
         />
       </div>
     </div>
-    <div v-if="uploadFileContainer && !printMode">
-      <form
-        v-if="!showUploadErrorMessage && !showUploadSuccessMessage"
-        enctype="multipart/form-data"
-        @submit.prevent="uploadFile"
+    <div :style="!uploadFileContainer ? {'height': '0'} : {'height': 'fit-content'}">
+      <div
+        id="upload-file-container"
+        class="upload-file-container"
       >
-        <div id="upload-file-container" class="upload-file-container">
+        <form
+          v-if="!showUploadErrorMessage && !showUploadSuccessMessage"
+          enctype="multipart/form-data"
+          @submit.prevent="uploadFile"
+        >
           <input id="file" type="file" accept=".csv" @change="checkValid">
+          <label class="file-messages" for="file">
+            <div>
+              <fa
+                style="cursor: pointer; margin-bottom: 1vh; transition: all .2s ease-in-out;"
+                :icon="['fas', 'download']"
+                size="2x"
+              />
+              <div v-if="!fileSelected">{{ $i18n.t('metabase.messages.selectFile') }}</div>
+              <div v-if="!fileIsValid && fileSelected">{{ $i18n.t('metabase.messages.selectFileError') }}</div>
+              <div v-if="fileSelected" style="justify-content: center; margin-top: 5vh;">
+                <strong id="file-name" style="display: block;" />
+                <button
+                  :disabled="!fileIsValid"
+                  class="btn btn-dark m-3"
+                  type="submit"
+                >
+                  {{ $i18n.t('metabase.buttons.send') }}
+                </button>
+              </div>
+            </div>
+          </label>
+        </form>
+        <div v-if="showUploadErrorMessage" class="file-messages">
+          <p>{{ $i18n.t('metabase.messages.uploadFileError') }}</p>
           <button
-            :disabled="!fileIsValid"
-            class="btn btn-dark m-3"
-            type="submit"
+            class="bn btn-dark m-3"
+            @click="clearFileUpload(false)"
           >
-            {{ $i18n.t('metabase.buttons.send') }}
-            {{ $i18n.t('metabase.buttons.send') }}
+            {{ $i18n.t('metabase.buttons.tryAgain') }}
           </button>
         </div>
-      </form>
-      <div v-if="showUploadErrorMessage" class="col-12">
-        <p>{{ $i18n.t('metabase.messages.uploadFileError') }}</p>
-        <button
-          class="bn btn-dark m-3"
-          @click="clearFileUpload(false)"
-        >
-          {{ $i18n.t('metabase.buttons.tryAgain') }}
-        </button>
+        <div v-if="showUploadSuccessMessage" class="file-messages">
+          <p>{{ $i18n.t(uploadSuccessMessage.message, uploadSuccessMessage.params) }}</p>
+          <button
+            class="bn btn-dark m-3"
+            @click="clearFileUpload(true)"
+          >
+            {{ $i18n.t('metabase.buttons.close') }}
+          </button>
+        </div>
+        <div v-if="loadingSamples" class="spinner-border" />
       </div>
-      <div v-if="showUploadSuccessMessage" class="col-12">
-        <p>TODO: AÑADIR MENSAJE DEL SERVIDOR</p>
-        <button
-          class="bn btn-dark m-3"
-          @click="clearFileUpload(true)"
-        >
-          {{ $i18n.t('metabase.buttons.close') }}
-        </button>
-      </div>
-      <div v-if="isLoadingFileUpload" class="spinner-border" />
     </div>
     <div v-if="dashboardUrl" id="metabase-container" class="metabase-container">
       <iframe
@@ -129,8 +145,8 @@ export default {
   data() {
     return {
       fileIsValid: false,
+      fileSelected: false,
       metabaseDashboards: MetabaseDashboards,
-      isLoadingFileUpload: false,
       printMode: false,
       uploadFileContainer: false,
     };
@@ -142,11 +158,17 @@ export default {
     dashboardUrl() {
       return this.$store.getters['MetabaseStore/getDashboardUrl'];
     },
+    loadingSamples() {
+      return this.$store.getters['MetabaseStore/getLoadingSamples'];
+    },
     showUploadErrorMessage() {
       return this.$store.getters['MetabaseStore/getShowUploadErrorMessage'];
     },
     showUploadSuccessMessage() {
       return this.$store.getters['MetabaseStore/getShowUploadSuccessMessage'];
+    },
+    uploadSuccessMessage() {
+      return this.$store.getters['MetabaseStore/getUploadSuccessMessage'];
     },
   },
   mounted() {
@@ -159,48 +181,46 @@ export default {
     checkValid() {
       const csvFile = document.querySelector('#file');
       this.fileIsValid = csvFile && csvFile.files[0];
+      this.fileSelected = !!csvFile;
+      this.fileSelectHandler(csvFile.files[0]);
     },
     clearFileUpload(close) {
       const csvFile = document.querySelector('#file');
       if (csvFile && csvFile.files) csvFile.value = '';
       this.$store.dispatch('MetabaseStore/setShowUploadErrorMessage', false);
       this.$store.dispatch('MetabaseStore/setShowUploadSuccessMessage', false);
+      this.fileSelected = false;
+      this.fileIsValid = false;
 
       if (close) {
+        const uploadFileContainer = document.getElementById('upload-file-container');
+        uploadFileContainer.style.maxHeight = '0';
+        uploadFileContainer.style.border = 'unset';
         this.uploadFileContainer = false;
       } else {
         this.showUploadFileContainer();
       }
     },
+    fileSelectHandler(file) {
+      this.$nextTick(() => {
+        const fileName = document.getElementById('file-name');
+        fileName.innerHTML = file.name;
+      });
+    },
     generateMetabaseTokenUrl() {
       this.$store.dispatch('MetabaseStore/generateMetabaseTokenUrl');
-      /*
-      const { covidDashboard } = this;
-      const payload = {
-        resource: {
-          dashboard: covidDashboard ? 5 : 6,
-        },
-        params: {
-        },
-        exp: Math.round(Date.now() / 1000) + (10 * 60), // 10 minute expiration
-      };
-      const token = jwt.sign(payload, METABASE_SECRET_KEY);
-      this.iframeUrl = `${METABASE_SITE_URL}/embed/dashboard/${token}#bordered=false&titled=false&refresh=60`; */
     },
     refreshMetabase() {
       const iFrame = document.getElementById('metabase-content');
       if (iFrame) {
         this.generateMetabaseTokenUrl();
-        /*
-        this.$nextTick(() => {
-          iFrame.src = this.dashboardUrl;
-        }); */
       }
     },
     saveToPDF() {
       let originalHeight = '';
       const metabaseContainer = document.getElementById('metabase-container');
       this.printMode = true;
+      this.clearFileUpload(true);
       if (metabaseContainer) {
         originalHeight = metabaseContainer.clientHeight;
         metabaseContainer.style.height = '7500px';
@@ -212,15 +232,16 @@ export default {
       });
     },
     showUploadFileContainer() {
+      window.scrollTo(0, 0);
       this.uploadFileContainer = true;
       this.$nextTick(() => {
         const uploadFileContainer = document.getElementById('upload-file-container');
-        uploadFileContainer.style.maxHeight = '300px';
+        uploadFileContainer.style.maxHeight = '30vh';
         uploadFileContainer.style.border = '1px solid #efefef';
       });
     },
     uploadFile() {
-      this.isLoadingFileUpload = true;
+      this.$store.dispatch('MetabaseStore/setLoadingSamples', true);
       const formData = new FormData();
       const csvFile = document.querySelector('#file');
       formData.append('file', csvFile.files[0]);
@@ -244,5 +265,16 @@ li {
 }
 a {
   color: #42b983;
+}
+input[type="file"] {
+  display: none;
+}
+.file-messages {
+  width: 100%;
+  text-align: center;
+  transition: all .2s ease;
+  user-select: none;
+  cursor: pointer;
+  padding: 2rem 1.5rem;
 }
 </style>
