@@ -35,7 +35,9 @@
     </div>
     <div class="notice-container">
       <div style="display: flex; justify-content: space-between;">
-        <span>{{ loadBackupsError
+        <div v-if="loadingBackups">
+        </div>
+        <span v-if="!loadingBackups">{{ loadBackupsError
           ? $i18n.t('backups.connectionError')
           : $i18n.t('backups.filesFound', { count: backupList.length }) }}
         </span>
@@ -111,17 +113,20 @@
       @accept="removeBackup"
       @close="closeRemoveBackupModal"
     />
+    <loading-full-page v-if="loadingBackups"/>
   </div>
 </template>
 
 <script>
 import AcceptCancelModal from '@/components/modals/AcceptCancelModal';
+import LoadingFullPage from '@/components/commons/LoadingFullPage';
 import moment from 'moment';
 
 export default {
   name: 'BackupContainer',
   components: {
     AcceptCancelModal,
+    LoadingFullPage,
   },
   data() {
     return {
@@ -139,6 +144,9 @@ export default {
     },
     loadBackupsError() {
       return this.$store.getters['BackupsStore/getLoadBackupsError'];
+    },
+    loadingBackups() {
+      return this.$store.getters['BackupsStore/getLoadingBackups'];
     },
     locale() {
       return this.$i18n.locale;

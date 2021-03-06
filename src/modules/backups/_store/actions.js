@@ -34,6 +34,7 @@ const forceBackup = ({ dispatch }) => {
 };
 
 const getBackups = ({ dispatch }) => {
+  dispatch('setLoadingBackups', true);
   const getBackupsApi = Api.getBackups({
   });
   getBackupsApi.then((response) => {
@@ -41,9 +42,11 @@ const getBackups = ({ dispatch }) => {
     dispatch('setBackupList', data.data);
     dispatch('setLoadBackupsError', false);
     console.log('API GET BACKUPS SUCCESS', response);
+    dispatch('setLoadingBackups', false);
   }).catch((error) => {
     console.log('API GET BACKUPS ERROR', error);
     dispatch('setLoadBackupsError', true);
+    dispatch('setLoadingBackups', false);
   });
 };
 
@@ -71,6 +74,10 @@ const setLoadBackupsError = ({ commit }, payload) => {
   commit('setLoadBackupsError', payload);
 };
 
+const setLoadingBackups = ({ commit }, payload) => {
+  commit('setLoadingBackups', payload);
+};
+
 export default {
   changeDatabaseToBackup,
   forceBackup,
@@ -78,4 +85,5 @@ export default {
   removeBackup,
   setBackupList,
   setLoadBackupsError,
+  setLoadingBackups,
 };
