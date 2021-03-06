@@ -173,7 +173,7 @@ export default {
     },
     backupRows(backup) {
       const { rows } = backup;
-      return rows || this.$t('backups.unknown');
+      return Number.isInteger(rows) ? rows : this.$t('backups.unknown');
     },
     changeBackup() {
       this.$store.dispatch('BackupsStore/changeDatabaseToBackup', this.newBackup);

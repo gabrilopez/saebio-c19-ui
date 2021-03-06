@@ -226,7 +226,7 @@ export default {
       this.clearFileUpload(true);
       if (metabaseContainer) {
         originalHeight = metabaseContainer.clientHeight;
-        metabaseContainer.style.height = '7500px';
+        metabaseContainer.style.height = '10000px';
       }
       this.$nextTick(() => {
         window.print();
