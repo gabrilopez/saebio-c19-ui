@@ -109,7 +109,12 @@
         </div>
       </div>
     </div>
-    <div v-if="dashboardUrl" id="metabase-container" class="metabase-container">
+    <div
+      v-if="dashboardUrl"
+      id="metabase-container"
+      class="metabase-container"
+      :class="dashboard === metabaseDashboards.COVID_DASHBOARD ? 'metabase-container' : 'metabase-container-small'"
+    >
       <iframe
         id="metabase-content"
         :src="dashboardUrl"
@@ -220,13 +225,15 @@ export default {
       }
     },
     saveToPDF() {
+      const { dashboard } = this;
       let originalHeight = '';
       const metabaseContainer = document.getElementById('metabase-container');
       this.printMode = true;
       this.clearFileUpload(true);
       if (metabaseContainer) {
         originalHeight = metabaseContainer.clientHeight;
-        metabaseContainer.style.height = '10000px';
+        if (dashboard === MetabaseDashboards.COVID_DASHBOARD) metabaseContainer.style.height = '10000px';
+        if (dashboard === MetabaseDashboards.SAMPLES_DASHBOARD) metabaseContainer.style.height = '1000px';
       }
       this.$nextTick(() => {
         window.print();
