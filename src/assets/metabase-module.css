@@ -44,18 +44,6 @@
     margin-right: 20px;
 }
 
-.metabase-container {
-    width: 100vw;
-    height: 800rem;
-    padding: 0 13px 0 0;
-}
-
-.metabase-container-small {
-    width: 100vw;
-    height: 400rem;
-    padding: 0 13px 0 0;
-}
-
 .upload-file-container {
     border-radius: 4px;
     justify-content: space-around;

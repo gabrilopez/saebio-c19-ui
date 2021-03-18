@@ -112,11 +112,11 @@
     <div
       v-if="dashboardUrl"
       id="metabase-container"
-      class="metabase-container"
-      :class="dashboard === metabaseDashboards.COVID_DASHBOARD ? 'metabase-container' : 'metabase-container-small'"
     >
       <iframe
         id="metabase-content"
+        ref="iFrame"
+        :onload="resize"
         :src="dashboardUrl"
         frameborder="0"
         scrolling="no"
@@ -145,6 +145,7 @@
 
 <script>
 import * as MetabaseDashboards from '@/resources/types/MetabaseDashboards';
+import iframeResize from 'iframe-resizer/js/iframeResizer';
 
 export default {
   name: 'MetabaseContainer',
@@ -224,21 +225,17 @@ export default {
         this.generateMetabaseTokenUrl();
       }
     },
+    resize() {
+      const { iFrame } = this.$refs;
+      iframeResize({
+      }, iFrame);
+    },
     saveToPDF() {
-      const { dashboard } = this;
-      let originalHeight = '';
-      const metabaseContainer = document.getElementById('metabase-container');
       this.printMode = true;
       this.clearFileUpload(true);
-      if (metabaseContainer) {
-        originalHeight = metabaseContainer.clientHeight;
-        if (dashboard === MetabaseDashboards.COVID_DASHBOARD) metabaseContainer.style.height = '700rem';
-        if (dashboard === MetabaseDashboards.SAMPLES_DASHBOARD) metabaseContainer.style.height = '300rem';
-      }
       this.$nextTick(() => {
         window.print();
         this.printMode = false;
-        if (metabaseContainer) metabaseContainer.style.height = `${originalHeight}px`;
       });
     },
     showUploadFileContainer() {
