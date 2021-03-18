@@ -232,8 +232,8 @@ export default {
       this.clearFileUpload(true);
       if (metabaseContainer) {
         originalHeight = metabaseContainer.clientHeight;
-        if (dashboard === MetabaseDashboards.COVID_DASHBOARD) metabaseContainer.style.height = '10000px';
-        if (dashboard === MetabaseDashboards.SAMPLES_DASHBOARD) metabaseContainer.style.height = '1000px';
+        if (dashboard === MetabaseDashboards.COVID_DASHBOARD) metabaseContainer.style.height = '700rem';
+        if (dashboard === MetabaseDashboards.SAMPLES_DASHBOARD) metabaseContainer.style.height = '300rem';
       }
       this.$nextTick(() => {
         window.print();
