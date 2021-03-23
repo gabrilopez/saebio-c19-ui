@@ -6,6 +6,7 @@ import * as MetabaseDashboards from '@/resources/types/MetabaseDashboards';
 const state = {
   dashboard: MetabaseDashboards.COVID_DASHBOARD,
   dashboardUrl: '',
+  fileErrorLines: '',
   loadingSamples: false,
   showUploadErrorMessage: false,
   showUploadSuccessMessage: false,

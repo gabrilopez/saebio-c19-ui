@@ -5,20 +5,31 @@
       style="display: unset;"
     >
       <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content" style="max-height: 70vh;">
           <div class="modal-header">
             <h5 class="modal-title">
               {{ title }}
             </h5>
           </div>
-          <div class="modal-body">
+          <div class="modal-body" style="overflow: scroll;">
             {{ body }}
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="this.$emit('close')">
+            <button
+              v-if="showCancelButton"
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+              @click="this.$emit('close')"
+            >
               {{ $t('modals.buttons.cancel') }}
             </button>
-            <button type="button" class="btn btn-primary" @click="() => {this.$emit('accept'); this.$emit('close')}">
+            <button
+              v-if="showAcceptButton"
+              type="button"
+              class="btn btn-primary"
+              @click="() => {this.$emit('accept'); this.$emit('close')}"
+            >
               {{ $t('modals.buttons.accept') }}
             </button>
           </div>
@@ -35,6 +46,14 @@ export default {
     body: {
       type: String,
       required: true,
+    },
+    showAcceptButton: {
+      type: Boolean,
+      default: true,
+    },
+    showCancelButton: {
+      type: Boolean,
+      default: true,
     },
     title: {
       type: String,

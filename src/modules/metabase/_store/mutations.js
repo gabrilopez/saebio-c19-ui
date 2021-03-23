@@ -6,6 +6,10 @@ const setDashboardUrl = (state, payload) => {
   state.dashboardUrl = payload;
 };
 
+const setFileErrorLines = (state, payload) => {
+  state.fileErrorLines = payload;
+};
+
 const setLoadingSamples = (state, payload) => {
   state.loadingSamples = payload;
 };
@@ -25,6 +29,7 @@ const setUploadSuccessMessage = (state, payload) => {
 export default {
   setDashboard,
   setDashboardUrl,
+  setFileErrorLines,
   setLoadingSamples,
   setShowUploadErrorMessage,
   setShowUploadSuccessMessage,

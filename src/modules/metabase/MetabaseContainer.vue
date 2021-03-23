@@ -92,7 +92,7 @@
         <div v-if="showUploadErrorMessage" class="file-messages">
           <p>{{ $i18n.t('metabase.messages.uploadFileError') }}</p>
           <button
-            class="bn btn-dark m-3"
+            class="btn btn-dark m-3"
             @click="clearFileUpload(false)"
           >
             {{ $i18n.t('metabase.buttons.tryAgain') }}
@@ -101,7 +101,14 @@
         <div v-if="showUploadSuccessMessage" class="file-messages">
           <p>{{ $i18n.t(uploadSuccessMessage.message, uploadSuccessMessage.params) }}</p>
           <button
-            class="bn btn-dark m-3"
+            v-if="fileErrorLines"
+            class="btn btn-outline-dark m-3"
+            @click="openFileLineErrorsModal"
+          >
+            {{ $i18n.t('metabase.buttons.seeErrors') }}
+          </button>
+          <button
+            class="btn btn-dark m-3"
             @click="clearFileUpload(true)"
           >
             {{ $i18n.t('metabase.buttons.close') }}
@@ -140,19 +147,31 @@
         @click="saveToPDF"
       />
     </div>
+    <accept-cancel-modal
+      v-if="showFileLineErrorsModal"
+      :body="fileErrorLines"
+      :title="$i18n.t('metabase.messages.fileErrorLines')"
+      :show-cancel-button="false"
+      @accept="closeFileLineErrorsModal"
+    />
   </div>
 </template>
 
 <script>
 import * as MetabaseDashboards from '@/resources/types/MetabaseDashboards';
 import iframeResize from 'iframe-resizer/js/iframeResizer';
+import AcceptCancelModal from '@/components/modals/AcceptCancelModal';
 
 export default {
   name: 'MetabaseContainer',
+  components: {
+    AcceptCancelModal,
+  },
   data() {
     return {
       fileIsValid: false,
       fileSelected: false,
+      showFileLineErrorsModal: false,
       metabaseDashboards: MetabaseDashboards,
       printMode: false,
       uploadFileContainer: false,
@@ -164,6 +183,9 @@ export default {
     },
     dashboardUrl() {
       return this.$store.getters['MetabaseStore/getDashboardUrl'];
+    },
+    fileErrorLines() {
+      return this.$store.getters['MetabaseStore/getFileErrorLines'];
     },
     loadingSamples() {
       return this.$store.getters['MetabaseStore/getLoadingSamples'];
@@ -209,6 +231,9 @@ export default {
         this.showUploadFileContainer();
       }
     },
+    closeFileLineErrorsModal() {
+      this.showFileLineErrorsModal = false;
+    },
     fileSelectHandler(file) {
       this.$nextTick(() => {
         const fileName = document.getElementById('file-name');
@@ -217,6 +242,9 @@ export default {
     },
     generateMetabaseTokenUrl() {
       this.$store.dispatch('MetabaseStore/generateMetabaseTokenUrl');
+    },
+    openFileLineErrorsModal() {
+      this.showFileLineErrorsModal = true;
     },
     refreshMetabase() {
       const iFrame = document.getElementById('metabase-content');

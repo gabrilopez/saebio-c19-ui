@@ -25,9 +25,11 @@ const en = {
       close: 'Close',
       download: 'Download',
       send: 'Send',
+      seeErrors: 'See errors',
       tryAgain: 'Try again',
     },
     messages: {
+      fileErrorLines: 'Erroneous lines found',
       selectFile: 'Please select a CSV file to upload its content',
       selectFileError: 'File is not valid. Please choose a CSV file',
       uploadFileError: 'There was an error while connecting to the server. Please, try again later',

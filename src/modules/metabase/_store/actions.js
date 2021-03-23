@@ -27,6 +27,10 @@ const setDashboardUrl = ({ commit }, payload) => {
   commit('setDashboardUrl', payload);
 };
 
+const setFileErrorLines = ({ commit }, payload) => {
+  commit('setFileErrorLines', payload);
+};
+
 const setLoadingSamples = ({ commit }, payload) => {
   commit('setLoadingSamples', payload);
 };
@@ -61,7 +65,7 @@ const uploadSamples = ({ dispatch }, formData) => {
         errors: data.errors,
       },
     });
-    console.log(response);
+    dispatch('setFileErrorLines', data.errors > 0 ? data.errorLines : '');
   }).catch((error) => {
     dispatch('setLoadingSamples', false);
     dispatch('setShowUploadErrorMessage', true);
@@ -73,6 +77,7 @@ export default {
   generateMetabaseTokenUrl,
   setDashboard,
   setDashboardUrl,
+  setFileErrorLines,
   setLoadingSamples,
   setShowUploadErrorMessage,
   setShowUploadSuccessMessage,

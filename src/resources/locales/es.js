@@ -24,10 +24,12 @@ const es = {
     buttons: {
       close: 'Cerrar',
       download: 'Descargar',
+      seeErrors: 'Ver errores',
       send: 'Enviar',
       tryAgain: 'Intentar de nuevo',
     },
     messages: {
+      fileErrorLines: 'Líneas erróneas encontradas',
       selectFile: 'Seleccione un archivo CSV para cargar su contenido',
       selectFileError: 'Archivo no válido. Seleccione un archivo CSV para continuar',
       uploadFileError: 'Ha ocurrido un error al conectar con el servidor. Por favor, inténtelo de nuevo más tarde',
