@@ -72,9 +72,8 @@
                 :icon="['fas', 'download']"
                 size="2x"
               />
-              <div v-if="!fileSelected">{{ $i18n.t('metabase.messages.selectFile') }}</div>
-              <div v-if="!fileIsValid && fileSelected">{{ $i18n.t('metabase.messages.selectFileError') }}</div>
-              <div v-if="fileSelected" style="justify-content: center; margin-top: 1vh;">
+              <div v-if="!fileIsValid">{{ $i18n.t('metabase.messages.selectFile') }}</div>
+              <div v-if="fileIsValid" style="justify-content: center; margin-top: 1vh;">
                 <strong id="file-name" style="display: block;" />
                 <button
                   v-if="!loadingSamples"
@@ -170,7 +169,6 @@ export default {
   data() {
     return {
       fileIsValid: false,
-      fileSelected: false,
       showFileLineErrorsModal: false,
       metabaseDashboards: MetabaseDashboards,
       printMode: false,
@@ -207,19 +205,18 @@ export default {
     changeDashboard(dashboard) {
       this.$store.dispatch('MetabaseStore/setDashboard', dashboard);
       this.refreshMetabase();
+      window.scrollTo(0, 0);
     },
     checkValid() {
       const csvFile = document.querySelector('#file');
-      this.fileIsValid = csvFile && csvFile.files[0];
-      this.fileSelected = !!csvFile;
-      this.fileSelectHandler(csvFile.files[0]);
+      this.fileIsValid = csvFile && csvFile.files.length > 0;
+      if (this.fileIsValid) this.fileSelectHandler(csvFile.files[0]);
     },
     clearFileUpload(close) {
       const csvFile = document.querySelector('#file');
       if (csvFile && csvFile.files) csvFile.value = '';
       this.$store.dispatch('MetabaseStore/setShowUploadErrorMessage', false);
       this.$store.dispatch('MetabaseStore/setShowUploadSuccessMessage', false);
-      this.fileSelected = false;
       this.fileIsValid = false;
 
       if (close) {
@@ -237,7 +234,7 @@ export default {
     fileSelectHandler(file) {
       this.$nextTick(() => {
         const fileName = document.getElementById('file-name');
-        fileName.innerHTML = file.name;
+        fileName.innerHTML = file ? file.name : '';
       });
     },
     generateMetabaseTokenUrl() {
