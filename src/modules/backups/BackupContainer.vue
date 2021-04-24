@@ -44,7 +44,7 @@
         <button
           :disabled="loadBackupsError"
           class="btn-primary btn"
-          @click="forceBackup"
+          @click="createBackup"
         >
           {{ $i18n.t('backups.createBackup') }}
         </button>
@@ -192,8 +192,8 @@ export default {
     closeRemoveBackupModal() {
       this.showRemoveBackupModal = false;
     },
-    forceBackup() {
-      this.$store.dispatch('BackupsStore/forceBackup');
+    createBackup() {
+      this.$store.dispatch('BackupsStore/createBackup');
     },
     getBackups() {
       this.$store.dispatch('BackupsStore/getBackups');

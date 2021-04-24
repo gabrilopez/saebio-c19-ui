@@ -9,24 +9,24 @@ const changeDatabaseToBackup = ({ dispatch }, postData) => {
   const changeDatabaseToBackupApi = Api.changeDatabaseToBackup(postData, config);
   changeDatabaseToBackupApi.then((response) => {
     const { data } = response;
-    dispatch('setBackupList', data.data);
+    dispatch('setBackupList', data);
     console.log(response);
   }).catch((error) => {
     console.log(error);
   });
 };
 
-const forceBackup = ({ dispatch }) => {
+const createBackup = ({ dispatch }) => {
   const config = {
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
   };
-  const forceBackupApi = Api.forceBackup({
+  const createBackupApi = Api.createBackup({
   }, config);
-  forceBackupApi.then((response) => {
+  createBackupApi.then((response) => {
     const { data } = response;
-    dispatch('setBackupList', data.data);
+    dispatch('setBackupList', data);
     console.log(response);
   }).catch((error) => {
     console.log(error);
@@ -39,7 +39,7 @@ const getBackups = ({ dispatch }) => {
   });
   getBackupsApi.then((response) => {
     const { data } = response;
-    dispatch('setBackupList', data.data);
+    dispatch('setBackupList', data);
     dispatch('setLoadBackupsError', false);
     console.log('API GET BACKUPS SUCCESS', response);
     dispatch('setLoadingBackups', false);
@@ -53,13 +53,14 @@ const getBackups = ({ dispatch }) => {
 const removeBackup = ({ dispatch }, postData) => {
   const config = {
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
+      'Content-Type': 'application/json',
+      Accept: '*/*',
     },
   };
   const removeBackupApi = Api.removeBackup(postData, config);
   removeBackupApi.then((response) => {
     const { data } = response;
-    dispatch('setBackupList', data.data);
+    dispatch('setBackupList', data);
     console.log('API REMOVE BACKUP SUCCESS', response);
   }).catch((error) => {
     console.log('error', error);
@@ -80,7 +81,7 @@ const setLoadingBackups = ({ commit }, payload) => {
 
 export default {
   changeDatabaseToBackup,
-  forceBackup,
+  createBackup,
   getBackups,
   removeBackup,
   setBackupList,
