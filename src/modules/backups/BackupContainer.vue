@@ -100,18 +100,18 @@
       </div>
     </div>
     <accept-cancel-modal
-      v-if="showChangeBackupModal"
+      v-if="showRestoreBackupModal"
       :title="$i18n.t('backups.databaseChangeTitle')"
       :body="$i18n.t('backups.databaseChangeMessage', { name: backupName(newBackup) })"
-      @accept="changeBackup"
-      @close="closeChangeBackupModal"
+      @onAccept="restoreBackup"
+      @onClose="closeRestoreBackupModal"
     />
     <accept-cancel-modal
       v-if="showRemoveBackupModal"
       :title="$i18n.t('backups.removeBackupTitle')"
       :body="$i18n.t('backups.removeBackupMessage', { name: backupName(backupToRemove) })"
-      @accept="removeBackup"
-      @close="closeRemoveBackupModal"
+      @onAccept="removeBackup"
+      @onClose="closeRemoveBackupModal"
     />
     <loading-full-page v-if="loadingBackups"/>
   </div>
@@ -134,7 +134,7 @@ export default {
       },
       backupToRemove: {
       },
-      showChangeBackupModal: false,
+      showRestoreBackupModal: false,
       showRemoveBackupModal: false,
     };
   },
@@ -183,11 +183,11 @@ export default {
       const { rows } = backup;
       return Number.isInteger(rows) ? rows : this.$t('backups.unknown');
     },
-    changeBackup() {
-      this.$store.dispatch('BackupsStore/changeDatabaseToBackup', this.newBackup);
+    restoreBackup() {
+      this.$store.dispatch('BackupsStore/restoreBackup', this.newBackup);
     },
-    closeChangeBackupModal() {
-      this.showChangeBackupModal = false;
+    closeRestoreBackupModal() {
+      this.showRestoreBackupModal = false;
     },
     closeRemoveBackupModal() {
       this.showRemoveBackupModal = false;
@@ -198,8 +198,8 @@ export default {
     getBackups() {
       this.$store.dispatch('BackupsStore/getBackups');
     },
-    openChangeBackupModal() {
-      this.showChangeBackupModal = true;
+    openRestoreBackupModal() {
+      this.showRestoreBackupModal = true;
     },
     openRemoveBackupModal() {
       this.showRemoveBackupModal = true;
@@ -210,7 +210,7 @@ export default {
     selectBackup(backup) {
       if (backup.selected) return;
       this.newBackup = backup;
-      this.openChangeBackupModal();
+      this.openRestoreBackupModal();
     },
     selectBackupToRemove(backup) {
       if (backup.selected) return;

@@ -1,16 +1,15 @@
 import * as Api from '@/services/api';
 
-const changeDatabaseToBackup = ({ dispatch }, postData) => {
+const restoreBackup = ({ dispatch }, postData) => {
   const config = {
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
   };
-  const changeDatabaseToBackupApi = Api.changeDatabaseToBackup(postData, config);
-  changeDatabaseToBackupApi.then((response) => {
-    const { data } = response;
-    dispatch('setBackupList', data);
-    console.log(response);
+  const restoreBackupApi = Api.restoreBackup(postData, config);
+  restoreBackupApi.then((response) => {
+    dispatch('getBackups');
+    console.log('RESTORE BACKUP SUCCESS:', response);
   }).catch((error) => {
     console.log(error);
   });
@@ -25,9 +24,8 @@ const createBackup = ({ dispatch }) => {
   const createBackupApi = Api.createBackup({
   }, config);
   createBackupApi.then((response) => {
-    const { data } = response;
-    dispatch('setBackupList', data);
-    console.log(response);
+    dispatch('getBackups');
+    console.log(response.data);
   }).catch((error) => {
     console.log(error);
   });
@@ -39,7 +37,7 @@ const getBackups = ({ dispatch }) => {
   });
   getBackupsApi.then((response) => {
     const { data } = response;
-    dispatch('setBackupList', data);
+    dispatch('setBackupList', data.data);
     dispatch('setLoadBackupsError', false);
     console.log('API GET BACKUPS SUCCESS', response);
     dispatch('setLoadingBackups', false);
@@ -50,7 +48,7 @@ const getBackups = ({ dispatch }) => {
   });
 };
 
-const removeBackup = ({ dispatch }, postData) => {
+const removeBackup = ({ dispatch, getters }, postData) => {
   const config = {
     headers: {
       'Content-Type': 'application/json',
@@ -59,8 +57,16 @@ const removeBackup = ({ dispatch }, postData) => {
   };
   const removeBackupApi = Api.removeBackup(postData, config);
   removeBackupApi.then((response) => {
-    const { data } = response;
-    dispatch('setBackupList', data);
+    const removedBackup = postData;
+
+    // Remove backup from local array
+
+    // eslint-disable-next-line arrow-body-style
+    const backupList = getters.getBackupList.filter((backup) => {
+      return backup.createdAt !== removedBackup.createdAt && backup.name !== removedBackup.name;
+    });
+
+    dispatch('setBackupList', backupList);
     console.log('API REMOVE BACKUP SUCCESS', response);
   }).catch((error) => {
     console.log('error', error);
@@ -80,7 +86,7 @@ const setLoadingBackups = ({ commit }, payload) => {
 };
 
 export default {
-  changeDatabaseToBackup,
+  restoreBackup,
   createBackup,
   getBackups,
   removeBackup,

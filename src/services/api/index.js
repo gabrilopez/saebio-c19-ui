@@ -2,9 +2,9 @@ import globalAxios from 'axios';
 
 const host = process.env.VUE_APP_API_HOST_URL;
 
-export const changeDatabaseToBackup = (data, config) => globalAxios.post(`${host}/change-database-to-backup`, data, config);
+export const restoreBackup = (data, config) => globalAxios.put(`${host}/backup/restore`, data, config);
 
-export const createBackup = (data, config) => globalAxios.post(`${host}/create-backup`, data, config);
+export const createBackup = (data, config) => globalAxios.post(`${host}/backup`, data, config);
 
 export const getBackups = (config) => globalAxios.get(`${host}/backups`, config);
 
