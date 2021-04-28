@@ -148,10 +148,10 @@
     </div>
     <accept-cancel-modal
       v-if="showFileLineErrorsModal"
-      :body="fileErrorLines"
+      :body="readableFileErrorLines()"
       :title="$i18n.t('metabase.messages.fileErrorLines')"
       :show-cancel-button="false"
-      @accept="closeFileLineErrorsModal"
+      @onAccept="closeFileLineErrorsModal"
     />
   </div>
 </template>
@@ -242,6 +242,15 @@ export default {
     },
     openFileLineErrorsModal() {
       this.showFileLineErrorsModal = true;
+    },
+    readableFileErrorLines() {
+      const { fileErrorLines } = this;
+      let readableFormat = '';
+      // eslint-disable-next-line guard-for-in,no-restricted-syntax
+      for (const key in fileErrorLines) {
+        readableFormat += `<b>${this.$i18n.t(`metabase.messages.${key}`)}:</b> ${fileErrorLines[key]}\n\n\n`;
+      }
+      return readableFormat;
     },
     refreshMetabase() {
       const iFrame = document.getElementById('metabase-content');

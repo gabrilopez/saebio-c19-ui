@@ -11,9 +11,7 @@
               {{ title }}
             </h5>
           </div>
-          <div class="modal-body" style="overflow: scroll;">
-            {{ body }}
-          </div>
+          <div class="modal-body" style="overflow: scroll; white-space: pre-line;" v-html="body" />
           <div class="modal-footer">
             <button
               v-if="showCancelButton"

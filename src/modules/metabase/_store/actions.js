@@ -56,16 +56,17 @@ const uploadSamples = ({ dispatch }, formData) => {
   const uploadSamplesApi = Api.uploadSamples(formData, config);
   uploadSamplesApi.then((response) => {
     const { data } = response.data;
+    const { errorLines, added, errors } = data;
     dispatch('setLoadingSamples', false);
     dispatch('setShowUploadSuccessMessage', true);
     dispatch('setUploadSuccessMessage', {
       message: 'metabase.messages.uploadFileServerMessage',
       params: {
-        added: data.added,
-        errors: data.errors,
+        added,
+        errors,
       },
     });
-    dispatch('setFileErrorLines', data.errors > 0 ? data.errorLines : '');
+    dispatch('setFileErrorLines', data.errors > 0 ? errorLines : '');
   }).catch((error) => {
     dispatch('setLoadingSamples', false);
     dispatch('setShowUploadErrorMessage', true);

@@ -3,7 +3,7 @@ import * as Api from '@/services/api';
 const restoreBackup = ({ dispatch }, postData) => {
   const config = {
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
+      'Content-Type': 'application/json',
     },
   };
   const restoreBackupApi = Api.restoreBackup(postData, config);
@@ -18,7 +18,6 @@ const restoreBackup = ({ dispatch }, postData) => {
 const createBackup = ({ dispatch }) => {
   const config = {
     headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
     },
   };
   const createBackupApi = Api.createBackup({

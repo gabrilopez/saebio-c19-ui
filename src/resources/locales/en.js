@@ -29,7 +29,10 @@ const en = {
       tryAgain: 'Try again',
     },
     messages: {
+      alreadyExistingSamples: 'Already registered sample rows in database',
       fileErrorLines: 'Erroneous lines found',
+      insertError: 'Rows affected by database insert error',
+      rowFormatError: 'CSV file rows with format error',
       selectFile: 'Please select a CSV file to upload its content',
       selectFileError: 'File is not valid. Please choose a CSV file',
       uploadFileError: 'There was an error while connecting to the server. Please, try again later',

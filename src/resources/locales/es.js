@@ -29,7 +29,10 @@ const es = {
       tryAgain: 'Intentar de nuevo',
     },
     messages: {
-      fileErrorLines: 'Líneas erróneas encontradas',
+      alreadyExistingSamples: 'Filas con muestras ya registradas en la base de datos',
+      fileErrorLines: 'Filas erróneas encontradas',
+      insertError: 'Filas afectadas por un error al insertar en la base de datos',
+      rowFormatError: 'Filas con errores de formato en el archivo CSV',
       selectFile: 'Seleccione un archivo CSV para cargar su contenido',
       selectFileError: 'Archivo no válido. Seleccione un archivo CSV para continuar',
       uploadFileError: 'Ha ocurrido un error al conectar con el servidor. Por favor, inténtelo de nuevo más tarde',
