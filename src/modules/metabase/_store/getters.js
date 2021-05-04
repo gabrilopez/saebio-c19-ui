@@ -10,7 +10,7 @@ const getShowUploadErrorMessage = (state) => state.showUploadErrorMessage;
 
 const getShowUploadSuccessMessage = (state) => state.showUploadSuccessMessage;
 
-const getUploadSuccessMessage = (state) => state.uploadSuccessMessage;
+const getUploadSuccessMessageParams = (state) => state.uploadSuccessMessageParams;
 
 export default {
   getDashboard,
@@ -19,5 +19,5 @@ export default {
   getLoadingSamples,
   getShowUploadErrorMessage,
   getShowUploadSuccessMessage,
-  getUploadSuccessMessage,
+  getUploadSuccessMessageParams,
 };

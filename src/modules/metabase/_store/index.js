@@ -10,7 +10,8 @@ const state = {
   loadingSamples: false,
   showUploadErrorMessage: false,
   showUploadSuccessMessage: false,
-  uploadSuccessMessage: '',
+  uploadSuccessMessageParams: {
+  },
 };
 
 export default {

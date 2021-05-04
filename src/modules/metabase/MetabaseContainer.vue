@@ -98,7 +98,16 @@
           </button>
         </div>
         <div v-if="showUploadSuccessMessage" class="file-messages">
-          <p>{{ $i18n.t(uploadSuccessMessage.message, uploadSuccessMessage.params) }}</p>
+          <p>
+            {{ $i18n.t('metabase.messages.uploadFileServerMessage', uploadSuccessMessageParams) }}
+            {{ uploadSuccessMessageParams.updatedLineageVariant > 0
+              ? $i18n.t('metabase.messages.uploadFileServerMessageUpdatedSamples', uploadSuccessMessageParams)
+              : ''
+            }}
+          </p>
+          <p v-if="uploadSuccessMessageParams.updatedLineageVariant > 0">
+            {{  }}
+          </p>
           <button
             v-if="fileErrorLines"
             class="btn btn-outline-dark m-3"
@@ -194,8 +203,8 @@ export default {
     showUploadSuccessMessage() {
       return this.$store.getters['MetabaseStore/getShowUploadSuccessMessage'];
     },
-    uploadSuccessMessage() {
-      return this.$store.getters['MetabaseStore/getUploadSuccessMessage'];
+    uploadSuccessMessageParams() {
+      return this.$store.getters['MetabaseStore/getUploadSuccessMessageParams'];
     },
   },
   mounted() {

@@ -36,7 +36,8 @@ const en = {
       selectFile: 'Please select a CSV file to upload its content',
       selectFileError: 'File is not valid. Please choose a CSV file',
       uploadFileError: 'There was an error while connecting to the server. Please, try again later',
-      uploadFileServerMessage: 'Samples upload has finished. Added {added} samples, {errors} errors',
+      uploadFileServerMessage: 'Samples upload has finished. Added {added} samples, {errors} errors.',
+      uploadFileServerMessageUpdatedSamples: 'Updated lineage and variant from {upadtedLineageVariant} samples',
     },
   },
 

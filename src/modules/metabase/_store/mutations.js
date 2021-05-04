@@ -22,8 +22,8 @@ const setShowUploadSuccessMessage = (state, payload) => {
   state.showUploadSuccessMessage = payload;
 };
 
-const setUploadSuccessMessage = (state, payload) => {
-  state.uploadSuccessMessage = payload;
+const setUploadSuccessMessageParams = (state, payload) => {
+  state.uploadSuccessMessageParams = payload;
 };
 
 export default {
@@ -33,5 +33,5 @@ export default {
   setLoadingSamples,
   setShowUploadErrorMessage,
   setShowUploadSuccessMessage,
-  setUploadSuccessMessage,
+  setUploadSuccessMessageParams,
 };

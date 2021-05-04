@@ -36,7 +36,8 @@ const es = {
       selectFile: 'Seleccione un archivo CSV para cargar su contenido',
       selectFileError: 'Archivo no válido. Seleccione un archivo CSV para continuar',
       uploadFileError: 'Ha ocurrido un error al conectar con el servidor. Por favor, inténtelo de nuevo más tarde',
-      uploadFileServerMessage: 'La carga de muestras ha finalizado. Añadidas {added} muestras, {errors} errores',
+      uploadFileServerMessage: 'La carga de muestras ha finalizado. Añadidas {added} muestras, {errors} errores.',
+      uploadFileServerMessageUpdatedSamples: 'Actualizado el linaje y variante de {updatedLineageVariant} muestras.',
     },
   },
 

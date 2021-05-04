@@ -12,4 +12,4 @@ export const removeBackup = (data, config) => globalAxios.delete(`${host}/backup
   data, ...config,
 });
 
-export const uploadSamples = (data, config) => globalAxios.post(`${host}/insert-data`, data, config);
+export const uploadSamples = (data, config) => globalAxios.post(`${host}/samples`, data, config);

@@ -43,8 +43,8 @@ const setShowUploadSuccessMessage = ({ commit }, payload) => {
   commit('setShowUploadSuccessMessage', payload);
 };
 
-const setUploadSuccessMessage = ({ commit }, payload) => {
-  commit('setUploadSuccessMessage', payload);
+const setUploadSuccessMessageParams = ({ commit }, payload) => {
+  commit('setUploadSuccessMessageParams', payload);
 };
 
 const uploadSamples = ({ dispatch }, formData) => {
@@ -56,15 +56,11 @@ const uploadSamples = ({ dispatch }, formData) => {
   const uploadSamplesApi = Api.uploadSamples(formData, config);
   uploadSamplesApi.then((response) => {
     const { data } = response.data;
-    const { errorLines, added, errors } = data;
+    const { errorLines, added, errors, updatedLineageVariant } = data;
     dispatch('setLoadingSamples', false);
     dispatch('setShowUploadSuccessMessage', true);
-    dispatch('setUploadSuccessMessage', {
-      message: 'metabase.messages.uploadFileServerMessage',
-      params: {
-        added,
-        errors,
-      },
+    dispatch('setUploadSuccessMessageParams', {
+      added, errors, updatedLineageVariant,
     });
     dispatch('setFileErrorLines', data.errors > 0 ? errorLines : '');
   }).catch((error) => {
@@ -82,6 +78,6 @@ export default {
   setLoadingSamples,
   setShowUploadErrorMessage,
   setShowUploadSuccessMessage,
-  setUploadSuccessMessage,
+  setUploadSuccessMessageParams,
   uploadSamples,
 };
