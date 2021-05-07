@@ -18,7 +18,7 @@
               type="button"
               class="btn btn-secondary"
               data-dismiss="modal"
-              @click="this.$emit('onClose')"
+              @click="$emit('on-close')"
             >
               {{ $t('modals.buttons.cancel') }}
             </button>
@@ -26,7 +26,7 @@
               v-if="showAcceptButton"
               type="button"
               class="btn btn-primary"
-              @click="() => {this.$emit('onAccept'); this.$emit('onClose')}"
+              @click="() => {$emit('on-accept'); $emit('on-close')}"
             >
               {{ $t('modals.buttons.accept') }}
             </button>
@@ -58,7 +58,7 @@ export default {
       required: true,
     },
   },
-  emits: ['onAccept', 'onClose'],
+  emits: ['on-accept', 'on-close'],
 };
 </script>
 

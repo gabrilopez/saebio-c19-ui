@@ -1,10 +1,11 @@
-// Router configuration
 import {
   createApp,
 } from 'vue';
 import i18n from '@/resources/locales';
 import Router from '@/resources/router';
 import store from '@/services/store';
+
+import Notifications from '@kyvg/vue3-notification';
 
 /* FONT AWESOME */
 import {
@@ -30,6 +31,7 @@ const app = createApp(App);
 app.use(i18n);
 app.use(Router);
 app.use(store);
+app.use(Notifications);
 app.component('Fa', FontAwesomeIcon);
 // app.config.globalProperties.$store = store;
 app.mount('#app');

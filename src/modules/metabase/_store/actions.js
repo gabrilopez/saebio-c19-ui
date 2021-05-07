@@ -1,6 +1,12 @@
 import * as Api from '@/services/api';
+import {
+  notify,
+} from '@kyvg/vue3-notification';
+import i18n from '@/resources/locales';
 
 const jwt = require('jsonwebtoken');
+
+const t = (str) => i18n.global.t(str);
 
 const generateMetabaseTokenUrl = ({ dispatch, getters }) => {
   const payload = {
@@ -63,10 +69,21 @@ const uploadSamples = ({ dispatch }, formData) => {
       added, errors, updatedLineageVariant,
     });
     dispatch('setFileErrorLines', data.errors > 0 ? errorLines : '');
-  }).catch((error) => {
+
+    notify({
+      title: t('notifications.successTitle'),
+      text: t('notifications.uploadSamplesSuccess'),
+      type: 'success',
+    });
+  }).catch(() => {
     dispatch('setLoadingSamples', false);
     dispatch('setShowUploadErrorMessage', true);
-    console.log(error);
+
+    notify({
+      title: t('notifications.errorTitle'),
+      text: t('notifications.uploadSamplesError'),
+      type: 'error',
+    });
   });
 };
 

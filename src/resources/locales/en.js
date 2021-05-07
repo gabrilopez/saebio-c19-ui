@@ -58,6 +58,20 @@ const en = {
     samplesDashboard: 'Samples',
   },
 
+  notifications: {
+    createBackupSuccess: 'Backup created successfully!',
+    createBackupError: 'Backup could not be created',
+    errorTitle: 'Error',
+    getBackupsError: 'Could not fetch backups',
+    removeBackupSuccess: 'Backup created successfully!',
+    removeBackupError: 'Backup could not be removed',
+    restoreBackupSuccess: 'Backup restored successfully!',
+    restoreBackupError: 'Backup could not be restored',
+    successTitle: 'Done!',
+    uploadSamplesSuccess: 'CSV file processed successfully!',
+    uploadSamplesError: 'CSV file could not be processed',
+  },
+
   saebio: 'Saebio',
 };
 

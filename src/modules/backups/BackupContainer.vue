@@ -103,15 +103,15 @@
       v-if="showRestoreBackupModal"
       :title="$i18n.t('backups.databaseChangeTitle')"
       :body="$i18n.t('backups.databaseChangeMessage', { name: backupName(newBackup) })"
-      @onAccept="restoreBackup"
-      @onClose="closeRestoreBackupModal"
+      @on-accept="restoreBackup"
+      @on-close="closeRestoreBackupModal"
     />
     <accept-cancel-modal
       v-if="showRemoveBackupModal"
       :title="$i18n.t('backups.removeBackupTitle')"
       :body="$i18n.t('backups.removeBackupMessage', { name: backupName(backupToRemove) })"
-      @onAccept="removeBackup"
-      @onClose="closeRemoveBackupModal"
+      @on-accept="removeBackup"
+      @on-close="closeRemoveBackupModal"
     />
     <loading-full-page v-if="loadingBackups"/>
   </div>

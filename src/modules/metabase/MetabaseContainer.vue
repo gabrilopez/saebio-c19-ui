@@ -160,7 +160,7 @@
       :body="readableFileErrorLines()"
       :title="$i18n.t('metabase.messages.fileErrorLines')"
       :show-cancel-button="false"
-      @onAccept="closeFileLineErrorsModal"
+      @on-accept="closeFileLineErrorsModal"
     />
   </div>
 </template>

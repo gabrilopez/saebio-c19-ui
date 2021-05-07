@@ -1,4 +1,10 @@
 import * as Api from '@/services/api';
+import i18n from '@/resources/locales';
+import {
+  notify,
+} from '@kyvg/vue3-notification';
+
+const t = (str) => i18n.global.t(str);
 
 const restoreBackup = ({ dispatch }, postData) => {
   const config = {
@@ -7,11 +13,19 @@ const restoreBackup = ({ dispatch }, postData) => {
     },
   };
   const restoreBackupApi = Api.restoreBackup(postData, config);
-  restoreBackupApi.then((response) => {
+  restoreBackupApi.then(() => {
     dispatch('getBackups');
-    console.log('RESTORE BACKUP SUCCESS:', response);
-  }).catch((error) => {
-    console.log(error);
+    notify({
+      title: t('notifications.successTitle'),
+      text: t('notifications.restoreBackupSuccess'),
+      type: 'success',
+    });
+  }).catch(() => {
+    notify({
+      title: t('notifications.errorTitle'),
+      text: t('notifications.restoreBackupError'),
+      type: 'error',
+    });
   });
 };
 
@@ -22,11 +36,19 @@ const createBackup = ({ dispatch }) => {
   };
   const createBackupApi = Api.createBackup({
   }, config);
-  createBackupApi.then((response) => {
+  createBackupApi.then(() => {
     dispatch('getBackups');
-    console.log(response.data);
-  }).catch((error) => {
-    console.log(error);
+    notify({
+      title: t('notifications.successTitle'),
+      text: t('notifications.createBackupSuccess'),
+      type: 'success',
+    });
+  }).catch(() => {
+    notify({
+      title: t('notifications.errorTitle'),
+      text: t('notifications.createBackupError'),
+      type: 'error',
+    });
   });
 };
 
@@ -38,12 +60,15 @@ const getBackups = ({ dispatch }) => {
     const { data } = response;
     dispatch('setBackupList', data.data);
     dispatch('setLoadBackupsError', false);
-    console.log('API GET BACKUPS SUCCESS', response);
     dispatch('setLoadingBackups', false);
-  }).catch((error) => {
-    console.log('API GET BACKUPS ERROR', error);
+  }).catch(() => {
     dispatch('setLoadBackupsError', true);
     dispatch('setLoadingBackups', false);
+    notify({
+      title: t('notifications.errorTitle'),
+      text: t('notifications.getBackupsError'),
+      type: 'error',
+    });
   });
 };
 
@@ -57,18 +82,25 @@ const removeBackup = ({ dispatch, getters }, postData) => {
   const removeBackupApi = Api.removeBackup(postData, config);
   removeBackupApi.then((response) => {
     const removedBackup = postData;
-
-    // Remove backup from local array
-
     // eslint-disable-next-line arrow-body-style
     const backupList = getters.getBackupList.filter((backup) => {
       return backup.createdAt !== removedBackup.createdAt && backup.name !== removedBackup.name;
     });
-
     dispatch('setBackupList', backupList);
+
     console.log('API REMOVE BACKUP SUCCESS', response);
+    notify({
+      title: t('notifications.successTitle'),
+      text: t('notifications.removeBackupSuccess'),
+      type: 'success',
+    });
   }).catch((error) => {
     console.log('error', error);
+    notify({
+      title: t('notifications.errorTitle'),
+      text: t('notifications.removeBackupError'),
+      type: 'error',
+    });
   });
 };
 

@@ -58,6 +58,20 @@ const es = {
     samplesDashboard: 'Muestras',
   },
 
+  notifications: {
+    createBackupSuccess: '¡Copia de seguridad creada correctamente!',
+    createBackupError: 'No se ha podido crear la copia de seguridad',
+    errorTitle: 'Error',
+    getBackupsError: 'No se han podido cargar las copias de seguridad',
+    removeBackupSuccess: '¡Copia de seguridad eliminada correctamente!',
+    removeBackupError: 'No se ha podido eliminar la copia de seguridad',
+    restoreBackupSuccess: '¡Copia de seguridad restaurada correctamente!',
+    restoreBackupError: 'No se ha podido restaurar la copia de seguridad',
+    successTitle: '¡Hecho!',
+    uploadSamplesSuccess: '¡El archivo CSV ha sido procesado!',
+    uploadSamplesError: 'No se ha podido procesar el archivo CSV',
+  },
+
   saebio: 'Saebio',
 };
 
