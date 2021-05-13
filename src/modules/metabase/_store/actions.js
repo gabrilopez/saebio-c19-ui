@@ -62,11 +62,11 @@ const uploadSamples = ({ dispatch }, formData) => {
   const uploadSamplesApi = Api.uploadSamples(formData, config);
   uploadSamplesApi.then((response) => {
     const { data } = response.data;
-    const { errorLines, added, errors, updatedLineageVariant } = data;
+    const { errorLines, added, errors, updatedReasonLineageVariant } = data;
     dispatch('setLoadingSamples', false);
     dispatch('setShowUploadSuccessMessage', true);
     dispatch('setUploadSuccessMessageParams', {
-      added, errors, updatedLineageVariant,
+      added, errors, updatedReasonLineageVariant,
     });
     dispatch('setFileErrorLines', data.errors > 0 ? errorLines : '');
 

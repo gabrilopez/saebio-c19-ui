@@ -64,7 +64,13 @@
           enctype="multipart/form-data"
           @submit.prevent="uploadFile"
         >
-          <input id="file" type="file" accept=".csv" @change="checkValid">
+          <input
+            id="file"
+            type="file"
+            accept=".csv"
+            :disabled="loadingSamples"
+            @change="checkValid"
+          >
           <label class="file-messages" for="file">
             <div>
               <fa
@@ -100,13 +106,10 @@
         <div v-if="showUploadSuccessMessage" class="file-messages">
           <p>
             {{ $i18n.t('metabase.messages.uploadFileServerMessage', uploadSuccessMessageParams) }}
-            {{ uploadSuccessMessageParams.updatedLineageVariant > 0
+            {{ uploadSuccessMessageParams.updatedReasonLineageVariant > 0
               ? $i18n.t('metabase.messages.uploadFileServerMessageUpdatedSamples', uploadSuccessMessageParams)
               : ''
             }}
-          </p>
-          <p v-if="uploadSuccessMessageParams.updatedLineageVariant > 0">
-            {{  }}
           </p>
           <button
             v-if="fileErrorLines"
