@@ -20,7 +20,7 @@ const generateMetabaseTokenUrl = ({ dispatch, getters }) => {
 
   const token = jwt.sign(payload, process.env.VUE_APP_METABASE_SECRET_KEY);
   // eslint-disable-next-line max-len
-  const dashboardUrl = `${process.env.VUE_APP_METABASE_SITE_URL}/embed/dashboard/${token}#bordered=false&titled=false&refresh=60`;
+  const dashboardUrl = `${process.env.VUE_APP_METABASE_SITE_URL}/embed/dashboard/${token}#bordered=false&titled=false`;
 
   dispatch('setDashboardUrl', dashboardUrl);
 };
