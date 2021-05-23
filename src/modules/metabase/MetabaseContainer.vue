@@ -132,7 +132,18 @@
       id="metabase-container"
     >
       <iframe
-        id="metabase-content"
+        v-if="dashboard === metabaseDashboards.COVID_DASHBOARD"
+        ref="iFrame"
+        :onload="resize"
+        :src="dashboardUrl"
+        frameborder="0"
+        scrolling="no"
+        height="100%"
+        width="100%"
+        allowtransparency
+      />
+      <iframe
+        v-if="dashboard === metabaseDashboards.SAMPLES_DASHBOARD"
         ref="iFrame"
         :onload="resize"
         :src="dashboardUrl"
@@ -265,7 +276,7 @@ export default {
       return readableFormat;
     },
     refreshMetabase() {
-      const iFrame = document.getElementById('metabase-content');
+      const { iFrame } = this.$refs;
       if (iFrame) {
         iFrame.src = '';
         this.generateMetabaseTokenUrl();
@@ -274,6 +285,7 @@ export default {
     resize() {
       const { iFrame } = this.$refs;
       iframeResize({
+        log: true,
       }, iFrame);
     },
     saveToPDF() {

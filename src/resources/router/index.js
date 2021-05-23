@@ -12,6 +12,7 @@ const index = createRouter({
   routes: [
     {
       path: '/',
+      name: 'main',
       redirect: '/metabase',
     },
     {
@@ -25,6 +26,15 @@ const index = createRouter({
       component: BackupContainer,
     },
   ],
+});
+
+index.beforeEach((to, from, next) => {
+  if (!to.matched.length) {
+    next({
+      name: 'main',
+    });
+  }
+  next();
 });
 
 export default index;
