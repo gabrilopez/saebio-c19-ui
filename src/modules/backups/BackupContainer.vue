@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="covid-navbar">
+    <navbar-component>
       <div class="row" style="justify-self: flex-start; align-items: center;">
         <div class="dropdown-menu">
           <router-link
@@ -32,7 +32,7 @@
           @click="getBackups"
         />
       </div>
-    </div>
+    </navbar-component>
     <div class="notice-container">
       <div style="display: flex; justify-content: space-between;">
         <div v-if="loadingBackups">
@@ -121,10 +121,12 @@
 import AcceptCancelModal from '@/components/modals/AcceptCancelModal';
 import LoadingFullPage from '@/components/commons/LoadingFullPage';
 import moment from 'moment';
+import NavbarComponent from '@/components/commons/NavbarComponent';
 
 export default {
   name: 'BackupContainer',
   components: {
+    NavbarComponent,
     AcceptCancelModal,
     LoadingFullPage,
   },

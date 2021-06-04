@@ -53,9 +53,10 @@ const en = {
   navbar: {
     backups: 'Backups',
     backupsLabel: 'Database backups',
-    covidDashboard: 'Covid-19',
+    covidDashboard: 'General dashboard',
     covidLabel: 'Covid statistics',
-    samplesDashboard: 'Samples',
+    samplesDashboard: 'Samples dashboard',
+    variantsDashboard: 'Variants dashboard',
   },
 
   notifications: {

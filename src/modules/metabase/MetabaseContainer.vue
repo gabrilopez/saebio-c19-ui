@@ -1,6 +1,6 @@
 <template>
   <div class="covid-container">
-    <div v-if="!printMode" class="covid-navbar">
+    <navbar-component v-if="!printMode">
       <div class="row" style="justify-self: flex-start; align-items: center;">
         <div class="dropdown-menu">
           <a
@@ -18,6 +18,14 @@
             @click="changeDashboard(metabaseDashboards.SAMPLES_DASHBOARD)"
           >
             {{ $i18n.t('navbar.samplesDashboard') }}
+          </a>
+          <a
+            v-if="dashboard !== metabaseDashboards.VARIANTS_DASHBOARD"
+            class="dropdown-item"
+            style="cursor: pointer;"
+            @click="changeDashboard(metabaseDashboards.VARIANTS_DASHBOARD)"
+          >
+            {{ $i18n.t('navbar.variantsDashboard') }}
           </a>
           <router-link
             :to="{ name: 'backups-container' }"
@@ -53,7 +61,7 @@
           @click="refreshMetabase"
         />
       </div>
-    </div>
+    </navbar-component>
     <div :style="!uploadFileContainer ? {'height': '0'} : {'height': 'fit-content'}">
       <div
         id="upload-file-container"
@@ -154,6 +162,18 @@
         width="100%"
         allowtransparency
       />
+      <iframe
+        v-if="dashboard === metabaseDashboards.VARIANTS_DASHBOARD"
+        ref="iFrame"
+        :onload="resize"
+        :src="dashboardUrl"
+        frameborder="0"
+        scrolling="no"
+        style="height: 100%; width: 100%;"
+        height="100%"
+        width="100%"
+        allowtransparency
+      />
     </div>
     <div v-if="!printMode" class="footer-logo">
       <img
@@ -183,11 +203,13 @@
 import * as MetabaseDashboards from '@/resources/types/MetabaseDashboards';
 import iframeResize from 'iframe-resizer/js/iframeResizer';
 import AcceptCancelModal from '@/components/modals/AcceptCancelModal';
+import NavbarComponent from '@/components/commons/NavbarComponent';
 
 export default {
   name: 'MetabaseContainer',
   components: {
     AcceptCancelModal,
+    NavbarComponent,
   },
   data() {
     return {

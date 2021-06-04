@@ -53,9 +53,10 @@ const es = {
   navbar: {
     backups: 'Copias de seguridad',
     backupsLabel: 'Copias de seguridad de la base de datos',
-    covidDashboard: 'Covid-19',
+    covidDashboard: 'Cuadro de mando general',
     covidLabel: 'Estadísticas metabase',
-    samplesDashboard: 'Muestras',
+    samplesDashboard: 'Cuadro de mando de muestras',
+    variantsDashboard: 'Cuadro de mando de variantes',
   },
 
   notifications: {
