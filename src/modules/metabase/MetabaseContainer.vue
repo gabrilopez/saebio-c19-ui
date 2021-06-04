@@ -20,12 +20,12 @@
             {{ $i18n.t('navbar.samplesDashboard') }}
           </a>
           <a
-            v-if="dashboard !== metabaseDashboards.VARIANTS_DASHBOARD"
+            v-if="dashboard !== metabaseDashboards.LINEAGES_DASHBOARD"
             class="dropdown-item"
             style="cursor: pointer;"
-            @click="changeDashboard(metabaseDashboards.VARIANTS_DASHBOARD)"
+            @click="changeDashboard(metabaseDashboards.LINEAGES_DASHBOARD)"
           >
-            {{ $i18n.t('navbar.variantsDashboard') }}
+            {{ $i18n.t('navbar.lineagesDashboard') }}
           </a>
           <router-link
             :to="{ name: 'backups-container' }"
@@ -163,13 +163,12 @@
         allowtransparency
       />
       <iframe
-        v-if="dashboard === metabaseDashboards.VARIANTS_DASHBOARD"
+        v-if="dashboard === metabaseDashboards.LINEAGES_DASHBOARD"
         ref="iFrame"
         :onload="resize"
         :src="dashboardUrl"
         frameborder="0"
         scrolling="no"
-        style="height: 100%; width: 100%;"
         height="100%"
         width="100%"
         allowtransparency

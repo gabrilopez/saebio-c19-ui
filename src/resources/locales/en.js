@@ -56,7 +56,7 @@ const en = {
     covidDashboard: 'General dashboard',
     covidLabel: 'Covid statistics',
     samplesDashboard: 'Samples dashboard',
-    variantsDashboard: 'Variants dashboard',
+    lineagesDashboard: 'Lineages dashboard',
   },
 
   notifications: {

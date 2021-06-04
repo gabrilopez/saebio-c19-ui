@@ -56,7 +56,7 @@ const es = {
     covidDashboard: 'Cuadro de mando general',
     covidLabel: 'Estadísticas metabase',
     samplesDashboard: 'Cuadro de mando de muestras',
-    variantsDashboard: 'Cuadro de mando de variantes',
+    lineagesDashboard: 'Cuadro de mando de linajes',
   },
 
   notifications: {
