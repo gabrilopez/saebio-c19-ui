@@ -1,4 +1,5 @@
 # saebio-ui
+This is the GUI module of the Degree Final Project `sæbio: development of a dashboard for the multidimensional analysis of COVID-19`.
 
 ## Project setup
 ```
@@ -10,6 +11,11 @@ npm install
 npm run serve
 ```
 
+### Compiles for production
+```
+npm run serve-prod
+```
+
 ### Compiles and minifies for production
 ```
 npm run build
@@ -19,6 +25,3 @@ npm run build
 ```
 npm run lint
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
